@@ -60,3 +60,14 @@ Ta
 #RH
 rh <- plot_ly(data=jw_15min, x=~TIMESTAMP, y=~RH, type="scatter", mode="lines")
 rh
+
+#tipping bucket is in a different data table output
+jwrain_5min <- read.table(
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_rain_20210814.dat",
+  sep = ",", header=TRUE, skip=2)
+
+jwrain_5min <- jwrain_5min[-c(1), ]
+
+#rain @ 5 min interval
+rain <- plot_ly(data=jwrain_5min, x=~TS, y=~count, type="scatter", mode="lines")
+rain
