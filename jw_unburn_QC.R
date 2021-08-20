@@ -4,20 +4,30 @@ library(dplyr)
 library(lubridate)
 library(plotly)
 
+##setup
 jw_15min <- read.table(
   "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_met_15min_20210814.dat",
   sep = ",", header=TRUE, skip="1")
 
 jw_15min <- jw_15min[-c(1, 2), ]
 
-#put date format in POSIXct and change rest of colums to be numeric
+#put date format in POSIXct and change rest of columns to be numeric
 jw_15min <- jw_15min %>%
   mutate(TIMESTAMP = ymd_hms(TIMESTAMP)) %>%
   mutate_if(is.character,as.numeric)
 
+#tipping bucket is in a different data table output
+jwrain_5min <- read.table(
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_rain_20210814.dat",
+  sep = ",", header=TRUE, skip=2)
+
+jwrain_5min <- jwrain_5min[-c(1), ]
+
+jwrain_5min <- jwrain_5min %>%
+  mutate(TS = ymd_hms(TS)) %>%
+  mutate_if(is.character,as.numeric)
 
 ##check data using plotly
-
 #wind speed (m/s)
 ws <- plot_ly(data=jw_15min, x=~TIMESTAMP, y=~WS_ms_Avg, type="scatter")
 ws
@@ -61,17 +71,7 @@ Ta
 rh <- plot_ly(data=jw_15min, x=~TIMESTAMP, y=~RH, type="scatter", mode="lines")
 rh
 
-#tipping bucket is in a different data table output
-jwrain_5min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_rain_20210814.dat",
-  sep = ",", header=TRUE, skip=2)
-
-jwrain_5min <- jwrain_5min[-c(1), ]
-
-jwrain_5min <- jwrain_5min %>%
-  mutate(TS = ymd_hms(TS)) %>%
-  mutate_if(is.character,as.numeric)
-
+##switch to rain output
 #rain @ 5 min interval
 rain <- plot_ly(data=jwrain_5min, x=~TS, y=~count, type="scatter", mode="lines")
 rain
