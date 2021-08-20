@@ -68,6 +68,11 @@ jwrain_5min <- read.table(
 
 jwrain_5min <- jwrain_5min[-c(1), ]
 
+jwrain_5min <- jwrain_5min %>%
+  mutate(TS = ymd_hms(TS)) %>%
+  mutate_if(is.character,as.numeric)
+
 #rain @ 5 min interval
 rain <- plot_ly(data=jwrain_5min, x=~TS, y=~count, type="scatter", mode="lines")
 rain
+
