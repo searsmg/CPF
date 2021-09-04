@@ -7,7 +7,7 @@ library(plotly)
 ##setup
 #TC has 2 dataloggers - need to combine
 tc1_15min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_met_15min_20210814.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_met_15min_20210903.dat",
   sep = ",", header=TRUE, skip="1")
 
 tc1_15min <- tc1_15min[-c(1, 2), ]
@@ -17,7 +17,7 @@ tc1_15min <- tc1_15min %>%
   mutate(TIMESTAMP = ymd_hms(TIMESTAMP))
 
 tc2_15min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_met2_15min_20210814.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_met2_15min_20210903.dat",
   sep = ",", header=TRUE, skip="1")
 
 tc2_15min <- tc2_15min[-c(1, 2), ]
@@ -29,13 +29,25 @@ tc2_15min <- tc2_15min %>%
 
 #tipping bucket is in a different data table output
 tcrain_5min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_rain_5min_20210814.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_rain_20210903.dat",
   sep = ",", header=TRUE, skip=2)
 
 tcrain_5min <- tcrain_5min[-c(1), ]
 
 tcrain_5min <- tcrain_5min %>%
   mutate(TS = ymd_hms(TS)) %>%
+  mutate_if(is.character,as.numeric)
+
+#add geonor
+tcgeonor <- read.table(
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_geonor_20210903.dat",
+  sep = ",", header=TRUE, skip=1)
+
+#remove header stuff
+tcgeonor <- tcgeonor[-c(1, 2), ]
+
+tcgeonor <- tcgeonor %>%
+  mutate(TIMESTAMP = ymd_hms(TIMESTAMP)) %>%
   mutate_if(is.character,as.numeric)
 
 ##start with met1
@@ -91,3 +103,7 @@ nr
 #rain @ 5 min interval
 rain <- plot_ly(data=tcrain_5min, x=~TS, y=~count, type="scatter", mode="lines")
 rain
+
+#geonor rain data
+geonor <- plot_ly(data=tcgeonor, x=~TIMESTAMP, y=~Geonor_Depth_Average, type="scatter", mode="lines")
+geonor
