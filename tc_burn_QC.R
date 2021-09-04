@@ -101,7 +101,11 @@ nr
 
 ##rain from 5min rain
 #rain @ 5 min interval
-rain <- plot_ly(data=tcrain_5min, x=~TS, y=~count, type="scatter", mode="lines")
+tips <- plot_ly(data=tcrain_5min, x=~TS, y=~count, type="scatter", mode="lines")
+tips
+
+#add conversion of tips to rainfall amount
+rain <- plot_ly(data=tcrain_5min, x=~TS, y=~count*.254, type="scatter", mode="lines")
 rain
 
 #geonor rain data
