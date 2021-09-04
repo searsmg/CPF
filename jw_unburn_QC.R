@@ -6,7 +6,7 @@ library(plotly)
 
 ##setup
 jw_15min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_met_15min_20210814.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_met_15min_20210903.dat",
   sep = ",", header=TRUE, skip="1")
 
 jw_15min <- jw_15min[-c(1, 2), ]
@@ -18,7 +18,7 @@ jw_15min <- jw_15min %>%
 
 #tipping bucket is in a different data table output
 jwrain_5min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_rain_20210814.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_rain_20210903.dat",
   sep = ",", header=TRUE, skip=2)
 
 jwrain_5min <- jwrain_5min[-c(1), ]
@@ -73,6 +73,9 @@ rh
 
 ##switch to rain output
 #rain @ 5 min interval
-rain <- plot_ly(data=jwrain_5min, x=~TS, y=~count, type="scatter", mode="lines")
-rain
+tips <- plot_ly(data=jwrain_5min, x=~TS, y=~count, type="scatter", mode="lines")
+tips
 
+#calculate actual rainfall amount - 1 tip = .254 mm of rain
+rain <- plot_ly(data=jwrain_5min, x=~TS, y=~count*.254, type="scatter", mode="lines")
+rain
