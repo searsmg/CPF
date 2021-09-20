@@ -17,7 +17,7 @@ tc1_15min <- tc1_15min %>%
   mutate(TIMESTAMP = ymd_hms(TIMESTAMP))
 
 tc2_15min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_met2_15min_20210903.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_met2_15min_20210917.dat",
   sep = ",", header=TRUE, skip="1")
 
 tc2_15min <- tc2_15min[-c(1, 2), ]
@@ -29,7 +29,7 @@ tc2_15min <- tc2_15min %>%
 
 #tipping bucket is in a different data table output
 tcrain_5min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_rain_20210903.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_rain_20210917.dat",
   sep = ",", header=TRUE, skip=2)
 
 tcrain_5min <- tcrain_5min[-c(1), ]
@@ -40,7 +40,7 @@ tcrain_5min <- tcrain_5min %>%
 
 #add geonor
 tcgeonor <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_geonor_20210903.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_geonor_20210917.dat",
   sep = ",", header=TRUE, skip=1)
 
 #remove header stuff
