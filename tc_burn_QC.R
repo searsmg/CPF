@@ -7,7 +7,7 @@ library(plotly)
 ##setup
 #TC has 2 dataloggers - need to combine
 tc1_15min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_met_15min_20211025.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/CPF_20211030/tunnel_met_15min_20211030.dat",
   sep = ",", header=TRUE, skip="1")
 
 tc1_15min <- tc1_15min[-c(1, 2), ]
