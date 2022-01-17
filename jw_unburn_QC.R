@@ -6,7 +6,7 @@ library(plotly)
 
 ##setup
 jw_15min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/CPF_20211030/joewright_met_15min_20211030.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_met_15min_20220112.dat",
   sep = ",", header=TRUE, skip="1")
 
 jw_15min <- jw_15min[-c(1, 2), ]
@@ -18,7 +18,7 @@ jw_15min <- jw_15min %>%
 
 #tipping bucket is in a different data table output
 jwrain_5min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/CPF_20211030/joewright_rain_20211030.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_rain_20220112.dat",
   sep = ",", header=TRUE, skip=2)
 
 jwrain_5min <- jwrain_5min[-c(1), ]
