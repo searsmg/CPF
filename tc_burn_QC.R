@@ -1,4 +1,4 @@
-###processing/QC for TC burned met station
+####processing/QC for TC burned met station
 
 library(dplyr)
 library(lubridate)
@@ -17,7 +17,7 @@ tc1_15min <- tc1_15min %>%
   mutate(TIMESTAMP = ymd_hms(TIMESTAMP))
 
 tc2_15min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_met2_15min_20211025.dat",
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnel_met2_15min_20220122.dat",
   sep = ",", header=TRUE, skip="1")
 
 tc2_15min <- tc2_15min[-c(1, 2), ]
