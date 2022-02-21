@@ -3,7 +3,7 @@
 library(dplyr)
 library(lubridate)
 library(plotly)
-library(ggplot)
+library(ggplot2)
 library(stringr)
 
 #Plot size
@@ -12,6 +12,13 @@ PlotHeight = 9
 
 ## set wd where the csv is saved and where the output will go
 setwd("C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022")
+
+#read in geode aspen data - this will be the same every survey
+geode_aspen <- read.csv(
+  "C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022/aspen_geode_aspect.csv") %>%
+  rename(id = Name) %>%
+  select(id, aspect, elev_m)
+
 
 ## read in csv, get Date, select and rename columns
 feb <- read.csv("survey_feb2022.csv") %>%
@@ -71,7 +78,7 @@ ggplot(feb_pers, aes(x=id, y=avg_depth_cm, color=burn)) +
   geom_point(size=5) +
   ggtitle("persistent")
 
-ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+#ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 
 
 ## PERS - looking at variability in swe
@@ -80,11 +87,23 @@ ggplot(feb_pers, aes(x=id, y=swe, color=burn)) +
   geom_point(size=5)+
   ggtitle("persistent")
 
-ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+#ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 
 ## look at transitional
 feb_trans <- feb %>%
   filter(transect %in% c("Transitional_burn", "Transitional_unburn"))
+
+feb_trans <- merge(feb_trans, geode_aspen, by="id") %>%
+  mutate(aspect_dir = case_when(
+    between(aspect, 0, 22.5) ~"North",
+    between(aspect, 22.5, 67.5) ~ "Northeast",
+    between(aspect, 67.5, 112.5) ~ "East",
+    between(aspect, 112.5, 157.5) ~ "Southeast",
+    between(aspect, 157.5, 202.5) ~ "South",
+    between(aspect, 202.5, 247.5) ~ "Southwest",
+    between(aspect, 247.5, 292.5) ~ "West",
+    between(aspect, 292.5, 337.5) ~ "Northwest",
+    between(aspect, 337.5, 360) ~ "North"))
 
 ## getting rid of partially and all burned and saying burned
 feb_trans$burn <- str_replace_all(feb_trans$burn, "Partially_burned_some_needles", 
@@ -111,23 +130,31 @@ feb_trans <- feb_trans %>%
   mutate(vol = pi*(diam_cm/2)^2*avg_cordepth_cm,
          dens = avg_weight_g / vol,
          swe = dens * avg_cordepth_cm)
-  
 
 ## TRANS - look at variability in depth
 PLOT ="feb_trans_d"
-ggplot(feb_trans, aes(x=id, y=avg_depth_cm, color=burn)) +
+ggplot(feb_trans, aes(x=id, y=avg_depth_cm, color=burn, shape=aspect_dir)) +
   geom_point(size=5)+
   ggtitle("transitional")
 
 ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
-
 
 ## TRANS - looking at variability in swe
 PLOT = "feb_trans_swe"
-ggplot(feb_trans, aes(x=id, y=swe, color=burn)) +
+ggplot(feb_trans, aes(x=id, y=swe, color=burn, shape=aspect_dir)) +
   geom_point(size=5)+
   ggtitle("transitional")
 
 ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 
+#next two plots are breaking them out by aspect dir
+ggplot(feb_trans, aes(x=id, y=avg_depth_cm, color=burn)) +
+  geom_point(size=5)+
+  ggtitle("transitional") +
+  facet_wrap(~aspect_dir)
+
+ggplot(feb_trans, aes(x=id, y=swe, color=burn)) +
+  geom_point(size=5)+
+  ggtitle("transitional") +
+  facet_wrap(~aspect_dir)
 
