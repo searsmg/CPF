@@ -6,19 +6,18 @@ library(plotly)
 library(ggplot2)
 library(stringr)
 
-#Plot size
+## Plot size
 PlotWidth = 16.5
 PlotHeight = 9
 
 ## set wd where the csv is saved and where the output will go
 setwd("C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022")
 
-#read in geode aspen data - this will be the same every survey
+## read in geode aspen data - this will be the same every survey
 geode_aspen <- read.csv(
   "C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022/aspen_geode_aspect.csv") %>%
   rename(id = Name) %>%
   select(id, aspect, elev_m)
-
 
 ## read in csv, get Date, select and rename columns
 feb <- read.csv("survey_feb2022.csv") %>%
@@ -42,6 +41,8 @@ feb <- read.csv("survey_feb2022.csv") %>%
          coredepth3_cm = Snow.core.3.depth..cm.,
          coreweight3_g = Snow.core.3.weight..g.)
 
+##############################################################################
+
 ## look at persistent data first
 feb_pers <- feb %>%
   filter(transect == "Persistent")
@@ -53,7 +54,7 @@ feb_pers$burn <- str_replace_all(feb_pers$burn, "Partially_burned_some_needles",
 feb_pers$burn <- str_replace_all(feb_pers$burn, "All_burned_no_needles", 
                                  "Burned")
 
-#average across for depths by point id
+## average across for depths by point id
 feb_pers <- feb_pers %>%
   rowwise() %>%
   mutate(avg_depth_cm = mean(c(depth1_cm,
@@ -72,14 +73,13 @@ feb_pers <- feb_pers %>%
          dens = avg_weight_g / vol,
          swe = dens * avg_cordepth_cm)
 
-# PERS - look at variability in depth
+## PERS - look at variability in depth
 PLOT = "feb_pers_d"
 ggplot(feb_pers, aes(x=id, y=avg_depth_cm, color=burn)) +
   geom_point(size=5) +
   ggtitle("persistent")
 
 #ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
-
 
 ## PERS - looking at variability in swe
 PLOT = "feb_pers_swe"
@@ -89,10 +89,13 @@ ggplot(feb_pers, aes(x=id, y=swe, color=burn)) +
 
 #ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 
+#############################################################################
+
 ## look at transitional
 feb_trans <- feb %>%
   filter(transect %in% c("Transitional_burn", "Transitional_unburn"))
 
+## merge in the geode lat long then merge, rename aspect dirs
 feb_trans <- merge(feb_trans, geode_aspen, by="id") %>%
   mutate(aspect_dir = case_when(
     between(aspect, 0, 22.5) ~"North",
@@ -112,7 +115,7 @@ feb_trans$burn <- str_replace_all(feb_trans$burn, "Partially_burned_some_needles
 feb_trans$burn <- str_replace_all(feb_trans$burn, "All_burned_no_needles", 
                                  "Burned")
 
-#average across for depths by point id
+## average across for depths by point id
 feb_trans <- feb_trans %>%
   rowwise() %>%
   mutate(avg_depth_cm = mean(c(depth1_cm,
@@ -147,7 +150,7 @@ ggplot(feb_trans, aes(x=id, y=swe, color=burn, shape=aspect_dir)) +
 
 ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 
-#next two plots are breaking them out by aspect dir
+## next two plots are breaking them out by aspect dir
 ggplot(feb_trans, aes(x=id, y=avg_depth_cm, color=burn)) +
   geom_point(size=5)+
   ggtitle("transitional") +
