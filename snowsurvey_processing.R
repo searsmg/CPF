@@ -19,7 +19,15 @@ geode_aspen <- read.csv(
   rename(id = Name) %>%
   select(id, aspect, elev_m)
 
+## read in the temporary jw aspect and elev data
+# replace this after geode points are recorded
+jw_temp <- read.csv(
+  "C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022/prelim_SS_aspect.csv") %>%
+  rename(id = point_id) %>%
+  select(id, aspect, elev_m)
+
 ## read in csv, get Date, select and rename columns
+# don't use x and y in this df bc it is NOT from the geode
 feb <- read.csv("survey_feb2022.csv") %>%
   mutate(Datetime = mdy_hms(Date.and.Time)) %>%
   mutate(Date = as.Date(Datetime)) %>%
@@ -46,6 +54,20 @@ feb <- read.csv("survey_feb2022.csv") %>%
 ## look at persistent data first
 feb_pers <- feb %>%
   filter(transect == "Persistent")
+
+## adding in the TEMPORARY aspect and elev
+# change once jw geode data is collected
+feb_pers <- merge(feb_pers, jw_temp, by="id") %>%
+  mutate(aspect_dir = case_when(
+    between(aspect, 0, 22.5) ~"North",
+    between(aspect, 22.5, 67.5) ~ "Northeast",
+    between(aspect, 67.5, 112.5) ~ "East",
+    between(aspect, 112.5, 157.5) ~ "Southeast",
+    between(aspect, 157.5, 202.5) ~ "South",
+    between(aspect, 202.5, 247.5) ~ "Southwest",
+    between(aspect, 247.5, 292.5) ~ "West",
+    between(aspect, 292.5, 337.5) ~ "Northwest",
+    between(aspect, 337.5, 360) ~ "North"))
 
 ## getting rid of partially and all burned and saying burned
 feb_pers$burn <- str_replace_all(feb_pers$burn, "Partially_burned_some_needles", 
@@ -75,19 +97,19 @@ feb_pers <- feb_pers %>%
 
 ## PERS - look at variability in depth
 PLOT = "feb_pers_d"
-ggplot(feb_pers, aes(x=id, y=avg_depth_cm, color=burn)) +
+ggplot(feb_pers, aes(x=id, y=avg_depth_cm, color=burn, shape=aspect_dir)) +
   geom_point(size=5) +
   ggtitle("persistent")
 
-#ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 
 ## PERS - looking at variability in swe
 PLOT = "feb_pers_swe"
-ggplot(feb_pers, aes(x=id, y=swe, color=burn)) +
+ggplot(feb_pers, aes(x=id, y=swe, color=burn, shape=aspect_dir)) +
   geom_point(size=5)+
   ggtitle("persistent")
 
-#ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 
 #############################################################################
 
