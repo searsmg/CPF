@@ -1,5 +1,6 @@
 ###processing for Joe Wright unburned met station
 
+library(tidyverse)
 library(dplyr)
 library(lubridate)
 library(plotly)
@@ -41,6 +42,9 @@ sw <- plot_ly(data=jw_15min, x=~TIMESTAMP, y=~SWin_Avg, type="scatter", mode="li
 sw <- sw %>% add_trace(y=~SWout_Avg, type="scatter", mode="lines",name="SW_out")
 sw <- sw %>% layout(yaxis=list(title = "Radiation (W/m2)"))
 sw
+
+
+
 
 #LW in and LW out
 lw <- plot_ly(data=jw_15min, x=~TIMESTAMP, y=~LWin_Avg, type="scatter", mode="lines", name="LW_in")
