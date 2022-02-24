@@ -4,6 +4,7 @@ library(tidyverse)
 library(dplyr)
 library(lubridate)
 library(plotly)
+library(epitools)
 
 ##setup
 jw_15min <- read.table(
@@ -28,6 +29,11 @@ jwrain_5min <- jwrain_5min %>%
   mutate(TS = ymd_hms(TS)) %>%
   mutate_if(is.character,as.numeric)
 
+#delete later
+mc <- read.csv("C:/Users/sears/Documents/Research/CPF/Data_downloads/mtncampus_20220223.csv") %>%
+  mutate(datetime = ymd_hm(TIMESTAMP)) 
+
+
 ##check data using plotly
 #wind speed (m/s)
 ws <- plot_ly(data=jw_15min, x=~TIMESTAMP, y=~WS_ms_Avg, type="scatter")
@@ -43,8 +49,21 @@ sw <- sw %>% add_trace(y=~SWout_Avg, type="scatter", mode="lines",name="SW_out")
 sw <- sw %>% layout(yaxis=list(title = "Radiation (W/m2)"))
 sw
 
+ggplot() +
+  geom_line(data=mc, aes(x=datetime, y=SWin_Avg), color="blue") +
+  geom_line(data=jw_15min, aes(x=TIMESTAMP, y=SWin_Avg))
 
+ggplot() +
+  geom_line(data=mc, aes(x=datetime, y=SWout_Avg), color="blue") +
+  geom_line(data=jw_15min, aes(x=TIMESTAMP, y=SWout_Avg))
 
+ggplot() +
+  geom_line(data=mc, aes(x=datetime, y=SWnet_Avg), color="blue") +
+  geom_line(data=jw_15min, aes(x=TIMESTAMP, y=SWnet_Avg))
+
+ggplot() +
+  geom_line(data=mc, aes(x=datetime, y=SWalbedo_Avg), color="blue") +
+  geom_line(data=jw_15min, aes(x=TIMESTAMP, y=SWalbedo_Avg))
 
 #LW in and LW out
 lw <- plot_ly(data=jw_15min, x=~TIMESTAMP, y=~LWin_Avg, type="scatter", mode="lines", name="LW_in")
