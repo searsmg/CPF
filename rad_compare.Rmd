@@ -68,8 +68,10 @@ mc_tc_jw <- bind_rows(mc_tc, jw_hr) %>%
 
 ```{r}
 ## plot SW in 1 plot
-ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWin_Avg, color = site)) +
+swin <- ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWin_Avg, color = site)) +
   geom_line(size=1)
+
+ggplotly(swin)
 
 ```
 
