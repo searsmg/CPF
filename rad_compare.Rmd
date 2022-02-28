@@ -1,0 +1,75 @@
+---
+title: "CPF_comparingrad"
+author: "Megan Sears"
+date: "2/28/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(lubridate)
+library(plotly)
+library(ggplot2)
+library(RNRCS)
+
+```
+
+## Pulling in data
+
+
+```{r processing data}
+## pull in jw hourly met
+jw_hr <- read.table(
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/joewright_met_hr_20220227.dat",
+  sep = ",", header=TRUE, skip="1") %>%
+  slice(., -(1:2)) %>%
+  mutate(TIMESTAMP = ymd_hms(TIMESTAMP)) %>%
+  mutate_if(is.character,as.numeric) %>%
+  mutate(site = 'jw')
+
+## pull in tc hourly met
+tc_hr <- read.table(
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_met2_hr_20220227.dat",
+  sep = ",", header=TRUE, skip="1")%>%
+  slice(., -(1:2)) %>%
+  mutate(TIMESTAMP = ymd_hms(TIMESTAMP)) %>%
+  mutate_if(is.character,as.numeric) %>%
+  mutate(site = 'tc')
+
+## pull in mc hourly met
+mc_hr <- read.csv("C:/Users/sears/Documents/Research/CPF/Data_downloads/mtncampus_20220223.csv") %>%
+  mutate(TIMESTAMP = ymd_hm(TIMESTAMP)) %>%
+  mutate(hour = hour(TIMESTAMP),
+         yday = yday(TIMESTAMP)) %>%
+  group_by(yday, hour) %>%
+  summarize_all(list(mean)) %>%
+  mutate(TIMESTAMP = floor_date(TIMESTAMP, "hour")) %>%
+  mutate(site = 'mc')
+```
+
+##  Binding data together
+
+```{r getting one df, echo=T}
+## compare incoming SW between sites, put in 1 df
+mc_tc <- bind_rows(mc_hr, tc_hr)
+
+#bind all 3, then keep only rad data, filter to start on Nov1
+mc_tc_jw <- bind_rows(mc_tc, jw_hr) %>%
+  select(c(TIMESTAMP, SWin_Avg, SWout_Avg, 
+           LWin_Avg, LWout_Avg,
+           SWalbedo_Avg, site)) %>%
+  filter(TIMESTAMP > ymd_hms("2021-11-01 00:00:00"))
+
+```
+
+
+```{r}
+## plot SW in 1 plot
+ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWin_Avg, color = site)) +
+  geom_line(size=1)
+
+```
+
