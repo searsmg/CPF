@@ -2,7 +2,11 @@
 title: "CPF_comparingrad"
 author: "Megan Sears"
 date: "2/28/2022"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: journal
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +17,6 @@ library(dplyr)
 library(lubridate)
 library(plotly)
 library(ggplot2)
-library(RNRCS)
 
 ```
 
@@ -43,79 +46,140 @@ tc_hr <- read.table(
 mc_hr <- read.csv("C:/Users/sears/Documents/Research/CPF/Data_downloads/mtncampus_20220223.csv") %>%
   mutate(TIMESTAMP = ymd_hm(TIMESTAMP)) %>%
   mutate(hour = hour(TIMESTAMP),
-         yday = yday(TIMESTAMP)) %>%
-  group_by(yday, hour) %>%
+         yday = yday(TIMESTAMP),
+         year = year(TIMESTAMP)) %>%
+  group_by(year, yday, hour) %>%
   summarize_all(list(mean)) %>%
   mutate(TIMESTAMP = floor_date(TIMESTAMP, "hour")) %>%
   mutate(site = 'mc')
+
+## pull in persistent burn site
+bf_hr <- read.table(
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/wyatt/CR1000XSeries - new_Hourly_BF_2021.dat",
+  sep = ",", header=TRUE, skip="1") %>%
+  slice(., -(1:2)) %>%
+  mutate(TIMESTAMP = ymd_hms(TIMESTAMP)) %>%
+  mutate_if(is.character,as.numeric) %>%
+  mutate(site = 'bf')
+
+ub1_hr <- read.table(
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/wyatt/CR1000_7_One_Hour_UB_0110.dat",
+  sep = ",", header=TRUE, skip="1") %>%
+  slice(., -(1:2)) %>%
+  mutate(TIMESTAMP = ymd_hms(TIMESTAMP)) %>%
+  mutate_if(is.character,as.numeric) %>%
+  mutate(site = 'ub')
+
+ub2_hr <- read.table(
+  "C:/Users/sears/Documents/Research/CPF/Data_downloads/wyatt/CR1000_7_One_Hour_UB_0221.dat",
+  sep = ",", header=TRUE, skip="1") %>%
+  slice(., -(1:2)) %>%
+  mutate(TIMESTAMP = ymd_hms(TIMESTAMP)) %>%
+  mutate_if(is.character,as.numeric) %>%
+  mutate(site = 'ub')
+
+ub_hr <- bind_rows(ub1_hr, ub2_hr)
+
+
 ```
 
 ##  Binding data together
 
 ```{r getting one df, echo=T}
-## compare incoming SW between sites, put in 1 df
-mc_tc <- bind_rows(mc_hr, tc_hr)
-
-#bind all 3, then keep only rad data, filter to start on Nov1
-mc_tc_jw <- bind_rows(mc_tc, jw_hr) %>%
-  select(c(TIMESTAMP, SWin_Avg, SWout_Avg, 
+## compare incoming SW between sites, put in 1 df -- HOURLY
+all_rad <- bind_rows(mc_hr, tc_hr, ub_hr, bf_hr, jw_hr) %>%
+    select(c(TIMESTAMP, SWin_Avg, SWout_Avg, 
            LWin_Avg, LWout_Avg,
            SWalbedo_Avg, site)) %>%
-  filter(TIMESTAMP > ymd_hms("2021-11-01 00:00:00"))
+  filter(TIMESTAMP > ymd_hms("2021-11-01 00:00:00")) %>%
+  mutate(yday = yday(TIMESTAMP),
+         date = as_date(TIMESTAMP))
+
+## get into daily sums
+all_rad_daily <- all_rad %>%
+  select(-TIMESTAMP, SWalbedo_Avg) %>%
+  group_by(date, site) %>%
+  summarize_all(list(sum))
 
 ```
 ## Incoming shorwave rad
 
-```{r}
+```{r fig.width=12,fig.height=11}
 ## plot SW in 1 plot
-swin <- ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWin_Avg, color = site)) +
-  geom_line(size=1) +
-  ggtitle("SWin")
-
-swin
+swin <- ggplot(all_rad, aes(x = TIMESTAMP, y= SWin_Avg, color = site)) +
+  geom_line() +
+  ggtitle("SWin hourly")
 
 ggplotly(swin)
+
+swin_daily<- ggplot(all_rad_daily, aes(x = date, y= SWin_Avg, color = site)) +
+  geom_line() +
+  ggtitle("SWin daily sum")
+
+ggplotly(swin_daily)
 
 ```
 
 ## Outgoing shortwave rad
 
-```{r}
+```{r fig.width=12,fig.height=11}
 ## SW out as one plot
-swout <- ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWout_Avg, color = site)) +
-  geom_line(size=1) +
-  ggtitle("SWout")
-
-swout
+swout <- ggplot(all_rad, aes(x = TIMESTAMP, y= SWout_Avg, color = site)) +
+  geom_line() +
+  ggtitle("SWout hourly")
 
 ggplotly(swout)
+
+swout_daily<- ggplot(all_rad_daily, aes(x = date, y= SWout_Avg, color = site)) +
+  geom_line() +
+  ggtitle("SWout daily sum")
+
+ggplotly(swout_daily)
+
 
 ```
 
 ## Albedo
 
-```{r}
+```{r fig.width=12,fig.height=11}
 ## plot albebo in 1 plot but limit the y vals
-al <- ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWalbedo_Avg, color = site)) +
-  geom_line(size=1) +
+al <- ggplot(all_rad, aes(x = TIMESTAMP, y= SWalbedo_Avg, color = site)) +
+  geom_line() +
   ylim(0,1) +
-  ggtitle("Albedo")
-
-al
+  ggtitle("Albedo hourly")
 
 ggplotly(al)
+
+#get an albedo daily avg
+albedo_dailyavg <- all_rad %>%
+  select(date, site, SWalbedo_Avg) %>%
+  group_by(date, site) %>%
+  summarize(SWalbedo_daily = mean(SWalbedo_Avg))
+
+## daily albedo avg plot
+al_daily <- ggplot(albedo_dailyavg, aes(x = date, y= SWalbedo_daily, color = site)) +
+  geom_line() +
+  ylim(0,1) +
+  ggtitle("Albedo daily average")
+
+ggplotly(al_daily)
 
 ```
 
 ## Net shortwave (computing SWin - SWout)
 
-```{r}
-swnet <- ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWin_Avg-SWout_Avg, color=site)) +
-  geom_line(size=1) +
-  ggtitle("SWnet")
-
-swnet
+```{r fig.width=12,fig.height=11}
+swnet <- ggplot(all_rad, aes(x = TIMESTAMP, y= SWin_Avg-SWout_Avg, color=site)) +
+  geom_line() +
+  ggtitle("SWnet hourly")
 
 ggplotly(swnet)
+
+swnet_daily<- ggplot(all_rad_daily, aes(x = date, y= SWin_Avg-SWout_Avg, color = site)) +
+  geom_line() +
+  ggtitle("SWnet daily sum")
+
+ggplotly(swnet_daily)
+
 ```
 
