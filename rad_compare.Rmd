@@ -64,14 +64,58 @@ mc_tc_jw <- bind_rows(mc_tc, jw_hr) %>%
   filter(TIMESTAMP > ymd_hms("2021-11-01 00:00:00"))
 
 ```
-
+## Incoming shorwave rad
 
 ```{r}
 ## plot SW in 1 plot
 swin <- ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWin_Avg, color = site)) +
-  geom_line(size=1)
+  geom_line(size=1) +
+  ggtitle("SWin")
+
+swin
 
 ggplotly(swin)
 
+```
+
+## Outgoing shortwave rad
+
+```{r}
+## SW out as one plot
+swout <- ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWout_Avg, color = site)) +
+  geom_line(size=1) +
+  ggtitle("SWout")
+
+swout
+
+ggplotly(swout)
+
+```
+
+## Albedo
+
+```{r}
+## plot albebo in 1 plot but limit the y vals
+al <- ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWalbedo_Avg, color = site)) +
+  geom_line(size=1) +
+  ylim(0,1) +
+  ggtitle("Albedo")
+
+al
+
+ggplotly(al)
+
+```
+
+## Net shortwave (computing SWin - SWout)
+
+```{r}
+swnet <- ggplot(mc_tc_jw, aes(x = TIMESTAMP, y= SWin_Avg-SWout_Avg, color=site)) +
+  geom_line(size=1) +
+  ggtitle("SWnet")
+
+swnet
+
+ggplotly(swnet)
 ```
 
