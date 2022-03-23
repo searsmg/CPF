@@ -11,24 +11,17 @@ PlotWidth = 16.5
 PlotHeight = 9
 
 ## set wd where the csv is saved and where the output will go
-setwd("C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022")
+setwd("C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Mar2022")
 
-## read in geode aspen data - this will be the same every survey
-geode_aspen <- read.csv(
-  "C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022/aspen_geode_aspect.csv") %>%
+## read in geode data - this will be the same every survey
+geode_all <- read.csv(
+  "C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/geode_master_2022.csv") %>%
   rename(id = Name) %>%
-  select(id, aspect, elev_m)
+  select(id, aspect, elev_m) #later we can keep lat/long for spatial stuff
 
-## read in the temporary jw aspect and elev data
-# replace this after geode points are recorded
-jw_temp <- read.csv(
-  "C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022/prelim_SS_aspect.csv") %>%
-  rename(id = point_id) %>%
-  select(id, aspect, elev_m)
-
-## read in csv, get Date, select and rename columns
+## read in csv from snow survey by month, get Date, select and rename columns
 # don't use x and y in this df bc it is NOT from the geode
-feb <- read.csv("survey_feb2022.csv") %>%
+feb <- read.csv("C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022/survey_feb2022.csv") %>%
   mutate(Datetime = mdy_hms(Date.and.Time)) %>%
   mutate(Date = as.Date(Datetime)) %>%
   select(-c(1:6, 11, 27)) %>%
@@ -47,17 +40,48 @@ feb <- read.csv("survey_feb2022.csv") %>%
          coredepth2_cm = Snow.core.2.depth..cm.,
          coreweight2_g = Snow.core.2.weight..g.,
          coredepth3_cm = Snow.core.3.depth..cm.,
-         coreweight3_g = Snow.core.3.weight..g.)
+         coreweight3_g = Snow.core.3.weight..g.) %>%
+  mutate(month = 2)
 
-##############################################################################
+# adding aspect and elev to feb
+feb_all <- left_join(feb, geode_all, by = "id")
 
-## look at persistent data first
-feb_pers <- feb %>%
+mar <- read.csv("survey_mar2022.csv") %>%
+  mutate(Datetime = mdy_hms(Date.and.Time)) %>%
+  mutate(Date = as.Date(Datetime)) %>%
+  select(-c(1:6, 11, 27)) %>%
+  rename(transect = Transect.Name,
+         id = Point.ID,
+         burn = Burn.status,
+         burn_other = Other...Burn.status,
+         depth1_cm = Depth.1..cm.,
+         depth2_cm = Depth.2..cm.,
+         depth3_cm = Depth.3..cm.,
+         depth4_cm = Depth.4..cm.,
+         depth5_cm = Depth.5..cm.,
+         diam_cm = Snow.core.diameter..cm.,
+         coredepth1_cm = Snow.core.1.depth..cm.,
+         coreweight1_g = Snow.core.1.weight..g.,
+         coredepth2_cm = Snow.core.2.depth..cm.,
+         coreweight2_g = Snow.core.2.weight..g.,
+         coredepth3_cm = Snow.core.3.depth..cm.,
+         coreweight3_g = Snow.core.3.weight..g.) %>%
+  mutate(month = 3)
+
+# adding aspect and elev to mar
+mar_all <- left_join(mar, geode_all, by = "id")
+
+# bind feb and mar together
+all <- bind_rows(feb_all, mar_all)
+
+#############################################################################
+
+## look at transitional data first
+all_pers <- all %>%
   filter(transect == "Persistent")
 
-## adding in the TEMPORARY aspect and elev
-# change once jw geode data is collected
-feb_pers <- merge(feb_pers, jw_temp, by="id") %>%
+## define aspect dir
+all_pers <- all_pers %>%
   mutate(aspect_dir = case_when(
     between(aspect, 0, 22.5) ~"North",
     between(aspect, 22.5, 67.5) ~ "Northeast",
@@ -70,14 +94,14 @@ feb_pers <- merge(feb_pers, jw_temp, by="id") %>%
     between(aspect, 337.5, 360) ~ "North"))
 
 ## getting rid of partially and all burned and saying burned
-feb_pers$burn <- str_replace_all(feb_pers$burn, "Partially_burned_some_needles", 
+all_pers$burn <- str_replace_all(all_pers$burn, "Partially_burned_some_needles", 
                                "Burned")
 
-feb_pers$burn <- str_replace_all(feb_pers$burn, "All_burned_no_needles", 
+all_pers$burn <- str_replace_all(all_pers$burn, "All_burned_no_needles", 
                                  "Burned")
 
 ## average across for depths by point id
-feb_pers <- feb_pers %>%
+all_pers <- all_pers %>%
   rowwise() %>%
   mutate(avg_depth_cm = mean(c(depth1_cm,
                                depth2_cm,
@@ -95,18 +119,56 @@ feb_pers <- feb_pers %>%
          dens = avg_weight_g / vol,
          swe = dens * avg_cordepth_cm)
 
+#get rid of stuff we don't care about right now
+all_pers_sum <- all_pers %>%
+  select(transect, id, burn, Date, month, elev_m,
+         aspect_dir, avg_depth_cm, dens, swe)
+
 ## PERS - look at variability in depth
-PLOT = "feb_pers_d"
-ggplot(feb_pers, aes(x=id, y=avg_depth_cm, color=burn, shape=aspect_dir)) +
+PLOT = "all_pers_d"
+ggplot(all_pers_sum, aes(x=id, y=avg_depth_cm, color=burn, shape=aspect_dir, label=month)) +
   geom_point(size=5) +
-  ggtitle("persistent")
+  ggtitle("persistent") + 
+  geom_text(hjust=0, vjust=2)
 
 ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 
 ## PERS - looking at variability in swe
-PLOT = "feb_pers_swe"
-ggplot(feb_pers, aes(x=id, y=swe, color=burn, shape=aspect_dir)) +
+PLOT = "all_pers_swe"
+ggplot(all_pers_sum, aes(x=id, y=swe, color=burn, shape=aspect_dir, label=month)) +
   geom_point(size=5)+
+  ggtitle("persistent") +
+  geom_text(hjust=0, vjust=2)
+
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+
+PLOT = "depth_monthfacet"
+ggplot(all_pers_sum, aes(x=id, y=avg_depth_cm, color=burn, shape=aspect_dir)) +
+  geom_point(size=5) +
+  ggtitle("persistent") + 
+  facet_wrap(~month)
+
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+
+PLOT = "swe_monthfacet"
+ggplot(all_pers_sum, aes(x=id, y=swe, color=burn, shape=aspect_dir)) +
+  geom_point(size=5) +
+  ggtitle("persistent") + 
+  facet_wrap(~month)
+
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+
+#boxplots of burned vs unburned by month
+PLOT = "pers_depth_boxplot"
+ggplot(all_pers_sum, aes(x=as.factor(month), y=avg_depth_cm, fill=burn)) +
+  geom_boxplot() +
+  ggtitle("persistent")
+
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+
+PLOT = "pers_swe_boxplot"
+ggplot(all_pers_sum, aes(x=as.factor(month), y=swe, fill=burn)) +
+  geom_boxplot() +
   ggtitle("persistent")
 
 ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
@@ -114,11 +176,11 @@ ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 #############################################################################
 
 ## look at transitional
-feb_trans <- feb %>%
+all_trans <- all %>%
   filter(transect %in% c("Transitional_burn", "Transitional_unburn"))
 
 ## merge in the geode lat long then merge, rename aspect dirs
-feb_trans <- merge(feb_trans, geode_aspen, by="id") %>%
+all_trans <- all_trans %>%
   mutate(aspect_dir = case_when(
     between(aspect, 0, 22.5) ~"North",
     between(aspect, 22.5, 67.5) ~ "Northeast",
@@ -131,14 +193,14 @@ feb_trans <- merge(feb_trans, geode_aspen, by="id") %>%
     between(aspect, 337.5, 360) ~ "North"))
 
 ## getting rid of partially and all burned and saying burned
-feb_trans$burn <- str_replace_all(feb_trans$burn, "Partially_burned_some_needles", 
+all_trans$burn <- str_replace_all(all_trans$burn, "Partially_burned_some_needles", 
                                  "Burned")
 
-feb_trans$burn <- str_replace_all(feb_trans$burn, "All_burned_no_needles", 
+all_trans$burn <- str_replace_all(all_trans$burn, "All_burned_no_needles", 
                                  "Burned")
 
 ## average across for depths by point id
-feb_trans <- feb_trans %>%
+all_trans <- all_trans %>%
   rowwise() %>%
   mutate(avg_depth_cm = mean(c(depth1_cm,
                                depth2_cm,
@@ -156,30 +218,58 @@ feb_trans <- feb_trans %>%
          dens = avg_weight_g / vol,
          swe = dens * avg_cordepth_cm)
 
+#get rid of stuff we don't care about right now
+all_trans_sum <- all_trans %>%
+  select(transect, id, burn, Date, month, elev_m,
+         aspect_dir, avg_depth_cm, dens, swe)
+
 ## TRANS - look at variability in depth
-PLOT ="feb_trans_d"
-ggplot(feb_trans, aes(x=id, y=avg_depth_cm, color=burn, shape=aspect_dir)) +
-  geom_point(size=5)+
-  ggtitle("transitional")
+PLOT = "all_trans_d"
+ggplot(all_trans_sum, aes(x=id, y=avg_depth_cm, color=burn, shape=aspect_dir, label=month)) +
+  geom_point(size=5) +
+  ggtitle("transitional") + 
+  geom_text(hjust=0, vjust=2)
 
 ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 
 ## TRANS - looking at variability in swe
-PLOT = "feb_trans_swe"
-ggplot(feb_trans, aes(x=id, y=swe, color=burn, shape=aspect_dir)) +
+PLOT = "all_trans_swe"
+ggplot(all_trans_sum, aes(x=id, y=swe, color=burn, shape=aspect_dir, label=month)) +
   geom_point(size=5)+
+  ggtitle("transitional") +
+  geom_text(hjust=0, vjust=2)
+
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+
+## trans depth by month facet
+PLOT = "depth_monthfacet_trans"
+ggplot(all_trans_sum, aes(x=id, y=avg_depth_cm, color=burn, shape=aspect_dir)) +
+  geom_point(size=5) +
+  ggtitle("transitional") + 
+  facet_wrap(~month)
+
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+
+## trans swe by month facet
+PLOT = "swe_monthfacet_trans"
+ggplot(all_trans_sum, aes(x=id, y=swe, color=burn, shape=aspect_dir)) +
+  geom_point(size=5) +
+  ggtitle("transitional") + 
+  facet_wrap(~month)
+
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
+
+#boxplots of burned vs unburned by month
+PLOT = "trans_depth_boxplot"
+ggplot(all_trans_sum, aes(x=as.factor(month), y=avg_depth_cm, fill=burn)) +
+  geom_boxplot() + 
   ggtitle("transitional")
 
 ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
 
-## next two plots are breaking them out by aspect dir
-ggplot(feb_trans, aes(x=id, y=avg_depth_cm, color=burn)) +
-  geom_point(size=5)+
-  ggtitle("transitional") +
-  facet_wrap(~aspect_dir)
+PLOT = "trans_swe_boxplot"
+ggplot(all_trans_sum, aes(x=as.factor(month), y=swe, fill=burn)) +
+  geom_boxplot() +
+  ggtitle("transitional")
 
-ggplot(feb_trans, aes(x=id, y=swe, color=burn)) +
-  geom_point(size=5)+
-  ggtitle("transitional") +
-  facet_wrap(~aspect_dir)
-
+ggsave(paste(PLOT,".png",sep=""), width = PlotWidth, height = PlotHeight)
