@@ -11,17 +11,17 @@ PlotWidth = 16.5
 PlotHeight = 9
 
 ## set wd where the csv is saved and where the output will go
-setwd("C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Mar2022")
+setwd("D:/CPF/Snowsurvey_2022/Apr2022")
 
 ## read in geode data - this will be the same every survey
 geode_all <- read.csv(
-  "C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/geode_master_2022.csv") %>%
+  "D:/CPF/Snowsurvey_2022/geode_master_2022.csv") %>%
   rename(id = Name) %>%
   select(id, aspect, elev_m) #later we can keep lat/long for spatial stuff
 
 ## read in csv from snow survey by month, get Date, select and rename columns
 # don't use x and y in this df bc it is NOT from the geode
-feb <- read.csv("C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022/survey_feb2022.csv") %>%
+feb <- read.csv("D:/CPF/Snowsurvey_2022/Feb2022/survey_feb2022.csv") %>%
   mutate(Datetime = mdy_hms(Date.and.Time)) %>%
   mutate(Date = as.Date(Datetime)) %>%
   select(-c(1:6, 11, 27)) %>%
@@ -46,7 +46,7 @@ feb <- read.csv("C:/Users/sears/Documents/Research/CPF/Snowsurvey_2022/Feb2022/s
 # adding aspect and elev to feb
 feb_all <- left_join(feb, geode_all, by = "id")
 
-mar <- read.csv("survey_mar2022.csv") %>%
+mar <- read.csv("D:/CPF/Snowsurvey_2022/Mar2022/survey_mar2022.csv") %>%
   mutate(Datetime = mdy_hms(Date.and.Time)) %>%
   mutate(Date = as.Date(Datetime)) %>%
   select(-c(1:6, 11, 27)) %>%
@@ -73,6 +73,33 @@ mar_all <- left_join(mar, geode_all, by = "id")
 
 # bind feb and mar together
 all <- bind_rows(feb_all, mar_all)
+
+# add in the april data 
+apr <- read.csv("D:/CPF/Snowsurvey_2022/Apr2022/survey_apr2022.csv") %>%
+  mutate(Datetime = mdy_hms(Date.and.Time)) %>%
+  mutate(Date = as.Date(Datetime)) %>%
+  select(-c(1:6, 11, 27)) %>%
+  rename(transect = Transect.Name,
+         id = Point.ID,
+         burn = Burn.status,
+         burn_other = Other...Burn.status,
+         depth1_cm = Depth.1..cm.,
+         depth2_cm = Depth.2..cm.,
+         depth3_cm = Depth.3..cm.,
+         depth4_cm = Depth.4..cm.,
+         depth5_cm = Depth.5..cm.,
+         diam_cm = Snow.core.diameter..cm.,
+         coredepth1_cm = Snow.core.1.depth..cm.,
+         coreweight1_g = Snow.core.1.weight..g.,
+         coredepth2_cm = Snow.core.2.depth..cm.,
+         coreweight2_g = Snow.core.2.weight..g.,
+         coredepth3_cm = Snow.core.3.depth..cm.,
+         coreweight3_g = Snow.core.3.weight..g.) %>%
+  mutate(month = 4)
+
+apr_all <- left_join(apr, geode_all, by = "id")
+
+all <- bind_rows(all, apr_all)
 
 #############################################################################
 
