@@ -102,7 +102,7 @@ apr_all <- left_join(apr, geode_all, by = "id")
 all <- bind_rows(all, apr_all)
 
 #add in May
-may <- read.csv("D:/CPF/Snowsurvey_2022/Apr2022/survey_may2022.csv") %>%
+may <- read.csv("D:/CPF/Snowsurvey_2022/May2022/survey_may2022.csv") %>%
   mutate(Datetime = mdy_hms(Date.and.Time)) %>%
   mutate(Date = as.Date(Datetime)) %>%
   select(-c(1:6, 11, 27)) %>%
@@ -122,7 +122,7 @@ may <- read.csv("D:/CPF/Snowsurvey_2022/Apr2022/survey_may2022.csv") %>%
          coreweight2_g = Snow.core.2.weight..g.,
          coredepth3_cm = Snow.core.3.depth..cm.,
          coreweight3_g = Snow.core.3.weight..g.) %>%
-  mutate(month = 4)
+  mutate(month = 5)
 
 may_all <- left_join(may, geode_all, by = "id")
 
