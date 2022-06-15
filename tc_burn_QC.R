@@ -156,3 +156,29 @@ compare_raindaily <- ggplot(compare_daily) +
 ggplotly(compare_raindaily)
 
 compare_raindaily
+
+stage <- read.csv("D:/CPF/Data_downloads/tunnel_stage_20220614.csv") %>%
+  mutate(Datetime = mdy_hms(Datetime))
+
+compare_hr <- compare_rain %>%
+  group_by(Date = as.Date(format(TIMESTAMP, "%Y-%m-%d")),
+           Hour = hour(TIMESTAMP)) %>%
+  summarize(precip_hr_geo_mm = sum(precip_mm),
+            precip_hr_tb_mm = sum(precip_tb_mm),
+            Datetime = mean(TIMESTAMP)) %>%
+  mutate(Datetime = floor_date(Datetime, "hour"))
+
+
+compare_hr <- left_join(compare_hr, stage, by="Datetime")  
+
+compare_hr_plot <- ggplot(compare_hr) +
+  geom_line(aes(x=Datetime, y=precip_hr_tb_mm))+
+  geom_line(aes(x=Datetime, y=precip_hr_geo_mm), color="red", linetype="dashed") +
+  geom_line(aes(x=Datetime, y=Stage_mm/50), color="blue") +
+  scale_y_continuous(sec.axis = sec_axis(~.*50, name = "stage_mm"))
+  
+
+compare_hr_plot
+
+
+
