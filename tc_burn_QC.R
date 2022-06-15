@@ -7,7 +7,7 @@ library(plotly)
 ##setup
 #TC has 2 dataloggers - need to combine
 tc1_15min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_met_15min_20220112.dat",
+  "D:/CPF/Data_downloads/tunnelcreek_met_15min_20220614.dat",
   sep = ",", header=TRUE, skip="1")
 
 tc1_15min <- tc1_15min[-c(1, 2), ]
@@ -17,7 +17,7 @@ tc1_15min <- tc1_15min %>%
   mutate(TIMESTAMP = ymd_hms(TIMESTAMP))
 
 tc2_15min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnel_met2_15min_20220122.dat",
+  "D:/CPF/Data_downloads/tunnelcreek_met2_15min_20220614.dat",
   sep = ",", header=TRUE, skip="1")
 
 tc2_15min <- tc2_15min[-c(1, 2), ]
@@ -29,7 +29,7 @@ tc2_15min <- tc2_15min %>%
 
 #tipping bucket is in a different data table output
 tcrain_5min <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_rain_20211025.dat",
+  "D:/CPF/Data_downloads/tunnelcreek_rain_20220614.dat",
   sep = ",", header=TRUE, skip=2)
 
 tcrain_5min <- tcrain_5min[-c(1), ]
@@ -40,7 +40,7 @@ tcrain_5min <- tcrain_5min %>%
 
 #add geonor
 tcgeonor <- read.table(
-  "C:/Users/sears/Documents/Research/CPF/Data_downloads/tunnelcreek_geonor_20211025.dat",
+  "D:/CPF/Data_downloads/tunnelcreek_geonor_20220614.dat",
   sep = ",", header=TRUE, skip=1)
 
 #remove header stuff
@@ -105,9 +105,54 @@ tips <- plot_ly(data=tcrain_5min, x=~TS, y=~count, type="scatter", mode="lines")
 tips
 
 #add conversion of tips to rainfall amount
-rain <- plot_ly(data=tcrain_5min, x=~TS, y=~count*.254, type="scatter", mode="lines")
+rain <- plot_ly(data=tcrain_5min, x=~TS, y=~count*.1, type="scatter", mode="lines")
+rain <- rain %>% layout(yaxis=list(title='rain_mm'))
 rain
 
 #geonor rain data
 geonor <- plot_ly(data=tcgeonor, x=~TIMESTAMP, y=~Geonor_Depth_Average, type="scatter", mode="lines")
 geonor
+
+#geonor difference aka precip per 5 mins
+tcgeonor <- tcgeonor %>%
+  mutate(precip_mm  = Geonor_Depth_Average - lag(Geonor_Depth_Average))
+
+geonor_precip <- plot_ly(data=tcgeonor, x=~TIMESTAMP, y=~precip_mm, type="scatter", mode="lines")
+geonor_precip
+
+
+compare_rain <- tcgeonor %>%
+  select(c(TIMESTAMP, precip_mm)) %>%
+  mutate(precip_mm = if_else(precip_mm <0.05, 0, precip_mm))
+
+tcrain_precip <- tcrain_5min %>%
+  mutate(precip_tb_mm = count *.1) %>%
+  select(c(TS, precip_tb_mm)) %>%
+  rename(TIMESTAMP = TS)
+
+compare_rain <- left_join(compare_rain, tcrain_precip, by = "TIMESTAMP") %>%
+  na.omit()
+
+compare <- ggplot(compare_rain) +
+  geom_line(aes(x=TIMESTAMP, y=precip_tb_mm))+
+  geom_line(aes(x=TIMESTAMP, y=precip_mm), color="red", linetype="dashed")
+
+ggplotly(compare)
+
+compare
+
+#get daily sums of rainfall
+compare_daily <- compare_rain %>%
+  group_by(Date = as.Date(format(TIMESTAMP, "%Y-%m-%d"))) %>%
+  summarize(precip_daily_geo_mm = sum(precip_mm),
+            precip_daily_tb_mm = sum(precip_tb_mm))
+
+str(compare_daily)
+
+compare_raindaily <- ggplot(compare_daily) +
+  geom_line(aes(x=Date, y=precip_daily_tb_mm))+
+  geom_line(aes(x=Date, y=precip_daily_geo_mm), color="red", linetype="dashed")
+
+ggplotly(compare_raindaily)
+
+compare_raindaily
