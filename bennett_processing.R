@@ -29,7 +29,8 @@ me_rain <- me_rain_compos %>%
   rename(datetime = 1) %>%
   mutate(datetime = parse_date_time(datetime, 
                                   orders = c('%m/%d/%Y %H:%M',
-                                             '%m/%d/%y %I:%M:%S %p')))
+                                             '%m/%d/%y %I:%M:%S %p',
+                                             '%m-%d-%y %H:%M')))
 rm(me_rain_compos)
 
 #mm rain
@@ -79,7 +80,8 @@ rain_daily <- rain %>%
   summarize(dailyp_mm = sum(precip_mm)) 
 
 rain_plot <- ggplot(rain_daily, aes(x=date, y=dailyp_mm, color=site)) +
-  geom_point()
+  geom_point() + 
+  ylim(0,50)
 
 ggplotly(rain_plot)
 
@@ -135,6 +137,9 @@ ue_stage <- ue_stage_compo %>%
 rm(ue_stage_compo)
 
 #ue_upper stage (not downloaded yet)
+ue_upper_stage <- ue_upper_stage %>%
+  mutate(site = 'ue_upper',
+         datetime = mdy_hms(datetime))
 
 #um stage
 um_stage <- um_stage_compo %>%
@@ -163,7 +168,7 @@ rm(uw_stage_compo)
 #uw_upper stage (not downloaded yet)
 
 stage <- bind_rows(me_stage, me_upper_stage, mm_stage, mm_upper_stage,
-                   mw_stage, mw_upper_stage, ue_stage, um_stage, um_lower_stage,
+                   mw_stage, mw_upper_stage, ue_stage, ue_upper_stage, um_stage, um_lower_stage,
                    uw_stage)
 
 stage_plot <- ggplot(stage, aes(x=datetime, y=Stage_mm, color=site)) +
