@@ -53,7 +53,8 @@ ue_rain <- ue_rain_compos %>%
   mutate(site = "ue") %>%
   mutate(datetime = parse_date_time(datetime, 
                                     orders = c('%m/%d/%Y %H:%M',
-                                               '%m/%d/%y %I:%M:%S %p')))
+                                               '%m/%d/%y %I:%M:%S %p',
+                                               '%Y-%m-%d %H:%M')))
 rm(ue_rain_compos)
 
 #um rain
@@ -165,11 +166,15 @@ uw_stage <- uw_stage_compo %>%
 
 rm(uw_stage_compo)
 
-#uw_upper stage (not downloaded yet)
+#uw_upper stage
+uw_upper_stage <- uw_upper_stage %>%
+  mutate(site = 'uw_upper',
+         datetime = mdy_hms(datetime))
+
 
 stage <- bind_rows(me_stage, me_upper_stage, mm_stage, mm_upper_stage,
                    mw_stage, mw_upper_stage, ue_stage, ue_upper_stage, um_stage, um_lower_stage,
-                   uw_stage)
+                   uw_stage, uw_upper_stage)
 
 stage_plot <- ggplot(stage, aes(x=datetime, y=Stage_mm, color=site)) +
   geom_line()
