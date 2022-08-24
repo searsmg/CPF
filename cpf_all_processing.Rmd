@@ -1,0 +1,156 @@
+---
+title: "CPF_all_processing"
+author: "Megan Sears"
+date: '2022-08-24'
+output: html_document
+---
+
+```{r load packages, incldue = F}
+
+library(tidyverse)
+library(plotly)
+library(lubridate)
+library(stringr)
+
+```
+
+```{r load in data, include = F}
+setwd("N:/Research/Kampf/Private/field_data")
+
+#pull in all filenames with composite
+filenames <- list.files(".", pattern="composite", full.names=F)
+
+#read all the csvs
+dataframes <- lapply(filenames, read.csv)
+
+#name all the csv
+names(dataframes) <- substr(filenames, 1, 25)
+
+#extract csvs from list to global env
+lapply(names(dataframes), function(x) assign(x, dataframes[[x]], envir = .GlobalEnv))
+
+# remove old 'dataframes' and remove andrews site
+rm(dataframes, Andrews_rain_composite.cs, Andrews_sm_composite.csv) #remove dataframes list
+
+#pull in Bighorn composite data
+setwd("N:/Research/Kampf/Private/field_data/bighorn")
+filenames2 <- list.files(".", pattern="composite.", full.names=F)
+
+#do same steps as above
+#read all the csvs
+dataframes2 <- lapply(filenames2, read.csv)
+
+#name all the csv
+names(dataframes2) <- substr(filenames2, 1, 25)
+
+#extract csvs from list to global env
+lapply(names(dataframes2), function(x) assign(x, dataframes2[[x]], envir = .GlobalEnv))
+rm(dataframes2)
+
+#pull in Dry Creek composite data
+setwd("N:/Research/Kampf/Private/field_data/dry_creek")
+filenames3 <- list.files(".", pattern="composite.", full.names=F)
+
+#do same steps as above
+#read all the csvs
+dataframes3 <- lapply(filenames3, read.csv)
+
+#name all the csv
+names(dataframes3) <- substr(filenames3, 1, 25)
+
+#extract csvs from list to global env
+lapply(names(dataframes3), function(x) assign(x, dataframes3[[x]], envir = .GlobalEnv))
+rm(dataframes3)
+
+#set wd back to main field data folder
+setwd("N:/Research/Kampf/Private/field_data")
+
+```
+
+## Rain and precip
+
+```{r rain and precip}
+#aspen tipping bucket
+aspen_rain <- Aspen_rain_composite.csv %>%
+    mutate(datetime = parse_date_time(date_time, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')),
+           tips = 1,
+           date = date(datetime)) %>%
+  group_by(date) %>%
+  summarize(rain_mm_daily = sum(tips)*0.3) %>%
+  mutate(site = 'aspen')
+
+rm(Aspen_rain_composite.csv)
+
+#bighorn tipping bucket
+bighorn_rain <- bighorn_rain_composite_ne %>%
+  mutate(datetime = parse_date_time(datetime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')),
+         date = date(datetime)) %>%
+  group_by(date) %>% 
+  summarize(rain_mm_daily = sum(tips)*0.1)
+
+#bl4 tipping bucket
+bl4_rain <- bl4_rain_composite.csv %>%
+  mutate(datetime = parse_date_time(datetime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')),
+           tips = 1,
+           date = date(datetime))
+
+rm(bl4_rain_composite.csv)
+  
+#dry creek tipping bucket
+dry_rain <- dry_rain_composite_new.cs %>%
+  mutate(datetime = parse_date_time(DateTime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')),
+         date = date(datetime)) %>%
+  group_by(date) %>%
+  summarize(rain_mm_daily = sum(tips)*0.1)
+
+rm(dry_rain_composite_new.cs)
+
+#greyrock tipping bucket (removed in May 2022)
+greyrock_rain <- Greyrock_rain_composite.c %>%
+  mutate(datetime = parse_date_time(date_time, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M',
+                                             '%m/%d/%y %I:%M:%S %p')),
+         date = date(datetime),
+         tips = 1) %>%
+  group_by(date) %>% 
+  summarize(rain_mm_daily = sum(tips)*0.3)
+  
+rm(Greyrock_rain_composite.c)
+
+#joe wright tipping bucket
+joewright_rain <- joewright_rain_composite. %>%
+  mutate(datetime = parse_date_time(DateTime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')),
+         date = date(datetime)) %>%
+  group_by(date) %>%
+  summarize(rain_mm_daily = sum(tips)*0.1)
+
+rm(joewright_rain_composite.)
+
+#montgomery tipping bucket
+montgomery_rain <- montgomery_rain_composite %>%
+  mutate(datetime = parse_date_time(DateTime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')),
+           tips = 1,
+           date = date(datetime)) %>%
+    group_by(date) %>% 
+  summarize(rain_mm_daily = sum(tips)*0.3)
+  
+rm(montgomery_rain_composite)
+
+#skin tipping bucket
+
+
+```
+
