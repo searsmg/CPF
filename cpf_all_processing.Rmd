@@ -3,6 +3,8 @@ title: "CPF_all_processing"
 author: "Megan Sears"
 date: '2022-08-24'
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r load packages, incldue = F}
@@ -11,11 +13,15 @@ library(tidyverse)
 library(plotly)
 library(lubridate)
 library(stringr)
+library(knitr)
+
+knitr::opts_knit$set(root.dir = 'N:/Research/Kampf/Private/field_data')
 
 ```
 
+
 ```{r load in data, include = F}
-setwd("N:/Research/Kampf/Private/field_data")
+setwd('N:/Research/Kampf/Private/field_data')
 
 #pull in all filenames with composite
 filenames <- list.files(".", pattern="composite", full.names=F)
@@ -62,9 +68,6 @@ names(dataframes3) <- substr(filenames3, 1, 25)
 lapply(names(dataframes3), function(x) assign(x, dataframes3[[x]], envir = .GlobalEnv))
 rm(dataframes3)
 
-#set wd back to main field data folder
-setwd("N:/Research/Kampf/Private/field_data")
-
 ```
 
 ## Rain and precip
@@ -78,8 +81,7 @@ aspen_rain <- Aspen_rain_composite.csv %>%
            tips = 1,
            date = date(datetime)) %>%
   group_by(date) %>%
-  summarize(rain_mm_daily = sum(tips)*0.3) %>%
-  mutate(site = 'aspen')
+  summarize(rain_mm_daily = sum(tips)*0.3)
 
 rm(Aspen_rain_composite.csv)
 
@@ -92,17 +94,21 @@ bighorn_rain <- bighorn_rain_composite_ne %>%
   group_by(date) %>% 
   summarize(rain_mm_daily = sum(tips)*0.1)
 
+rm(bighorn_rain_composite_ne)
+
 #bl4 tipping bucket
 bl4_rain <- bl4_rain_composite.csv %>%
   mutate(datetime = parse_date_time(datetime, 
                                   orders = c('%m/%d/%Y %H:%M',
                                              '%y-%m-%d %H:%M')),
            tips = 1,
-           date = date(datetime))
+           date = date(datetime)) %>%
+  group_by(date) %>%
+  summarize(rain_mm_daily = sum(tips)*0.3)
 
 rm(bl4_rain_composite.csv)
   
-#dry creek tipping bucket
+#dry creek tipping bucket - powered through a met station until May 2022
 dry_rain <- dry_rain_composite_new.cs %>%
   mutate(datetime = parse_date_time(DateTime, 
                                   orders = c('%m/%d/%Y %H:%M',
@@ -126,7 +132,7 @@ greyrock_rain <- Greyrock_rain_composite.c %>%
   
 rm(Greyrock_rain_composite.c)
 
-#joe wright tipping bucket
+#joe wright tipping bucket - powered through a met station
 joewright_rain <- joewright_rain_composite. %>%
   mutate(datetime = parse_date_time(DateTime, 
                                   orders = c('%m/%d/%Y %H:%M',
@@ -150,7 +156,129 @@ montgomery_rain <- montgomery_rain_composite %>%
 rm(montgomery_rain_composite)
 
 #skin tipping bucket
+skin_rain <- Skin_rain_composite.csv %>%
+  mutate(datetime = parse_date_time(date_time, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')),
+           date = date(datetime),
+         tips = 1) %>%
+    group_by(date) %>% 
+  summarize(rain_mm_daily = sum(tips)*0.3)
 
+rm(Skin_rain_composite.csv)
+
+#tunnel tipping bucket - powered through a met station
+tunnel_rain <- tunnel_rain_composite.csv %>%
+  mutate(datetime = parse_date_time(DateTime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')),
+         date = date(datetime)) %>%
+  group_by(date) %>%
+  summarize(rain_mm_daily = sum(tips)*0.1)
+
+rm(tunnel_rain_composite.csv)
+
+#dry creek geonor
+dry_geonor <- dry_geonor_composite.csv %>%
+  mutate(depth_avg_mm = round(depth_avg_mm, digits = 2),
+    precip_mm  = if_else((depth_avg_mm - lag(depth_avg_mm)) < 0.05,
+                              0,
+                              (depth_avg_mm - lag(depth_avg_mm))),
+    date = date(datetime)) %>%
+  group_by(date) %>%
+  summarize(precip_mm_daily = sum(precip_mm))
+
+rm(dry_geonor_composite.csv)
+
+#tunnel geonor
+tunnel_geonor <- tunnel_geonor_composite.c %>%
+  mutate(depth_avg_mm = round(depth_avg_mm, digits = 2),
+    precip_mm  = if_else((depth_avg_mm - lag(depth_avg_mm)) < 0.05,
+                              0,
+                              (depth_avg_mm - lag(depth_avg_mm))),
+    date = date(datetime)) %>%
+  group_by(date) %>%
+  summarize(precip_mm_daily = sum(precip_mm))
+
+rm(tunnel_geonor_composite.c)
+
+#output all rain and precip daily data
+write_csv(aspen_rain, 'Aspen_P_daily.csv')
+write_csv(bighorn_rain, './bighorn/Bighorn_P_daily_new.csv')
+write_csv(bl4_rain, 'bl4_P_daily.csv')
+write_csv(dry_rain, './dry_creek/Dry_P_daily_new.csv')
+write_csv(greyrock_rain, 'Greyrock_P_daily.csv')
+write_csv(joewright_rain, 'joewright_P_daily.csv')
+write_csv(montgomery_rain, 'montgomery_P_daily.csv')
+write_csv(skin_rain, 'Skin_P_daily.csv')
+write_csv(tunnel_rain, 'tunnel_P_daily.csv')
+write_csv(dry_geonor, './dry_creek/Dry_geonor_daily.csv')
+write_csv(tunnel_geonor, 'Tunnel_geonor_daily.csv')
+
+
+#output daily WY rain and precip data (WY2022 next)
+#add site to each df, then bindrows, and filter dates
+
+```
+
+## Met data
+
+```{r met}
+
+#update all this code later
+
+bighorn_met=read_csv('./bighorn/bighorn_met_composite.csv')
+bighorn_met <- bighorn_met %>%
+mutate(datetime = parse_date_time(datetime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')))
+#bighorn_met$datetime = as_datetime(bighorn_met$datetime,tz="MST", format="%m/%d/%Y %H:%M")
+bighorn_met$datetime = as.POSIXct(bighorn_met$datetime,tz="GMT",format="%m/%d/%Y %H")
+bighorn_met$date=date(bighorn_met$datetime)
+
+bighorn_met$Ta_C_old=(bighorn_met$Ta_F-32)*5/9
+bighorn_met$RH_frac=bighorn_met$RH_percent/100
+
+bighorn_met_daily=group_by(bighorn_met,date) %>%
+  summarize(Ta_C=mean(Ta_C),Ta_C_old=mean(Ta_C_old),Ts_5=mean(Ts_5),Ts_20=mean(Ts_20),Ts_50=mean(Ts_50),
+            SM_5=mean(VWC_5)/100,SM_20=mean(VWC_20)/100,
+            SM_50=mean(VWC_50)/100,Rn=mean(Rn_Wm2),SnowD_cm=mean(SnowD_m)*100,RH=mean(RH_frac),
+            u_ms=mean(u_ms),Rs_in=mean(Rs_in),Rs_out=mean(Rs_out),Rl_in=mean(Rl_in),
+            Rl_out=mean(Rl_out),Rn=mean(Rn),albedo=mean(albedo))
+
+#bighorn_met$VWC_20_test=bighorn_met$VWC_20*(-1)-11
+bighorn_sm=ggplot()+geom_line(data=bighorn_met,aes(x=datetime,y=VWC_5),color='red')+
+  geom_line(data=bighorn_met,aes(x=datetime,y=VWC_20),color='orange')+
+  geom_line(data=bighorn_met,aes(x=datetime,y=VWC_50),color='blue')
+ggplotly(bighorn_sm)
+
+
+bighorn_Rs=ggplot()+geom_line(data=bighorn_met,aes(x=datetime,y=Rs_in))+
+  geom_line(data=bighorn_met,aes(x=datetime,y=Rs_out),color='red')+
+  geom_line(data=bighorn_met,aes(x=datetime,y=Rn),color='blue')
+ggplotly(bighorn_Rs)
+
+bighorn_Rl=ggplot()+geom_line(data=bighorn_met,aes(x=datetime,y=Rl_in))+
+  geom_line(data=bighorn_met,aes(x=datetime,y=Rl_out),color='red')
+ggplotly(bighorn_Rl)
+
+bighorn_T=ggplot()+geom_line(data=bighorn_met,aes(x=datetime,y=Ts_5),color='red')+
+  geom_line(data=bighorn_met,aes(x=datetime,y=Ts_20),color='orange')+
+  geom_line(data=bighorn_met,aes(x=datetime,y=Ts_50),color='blue')+
+  geom_line(data=bighorn_met,aes(x=datetime,y=Ta_C),color='black')
+ggplotly(bighorn_T)
+
+bighorn_snow=ggplot()+geom_line(data=bighorn_met,aes(x=datetime,y=SnowD_m))
+ggplotly(bighorn_snow)
+
+bighorn_RH=ggplot()+geom_line(data=bighorn_met,aes(x=datetime,y=RH_percent))
+ggplotly(bighorn_RH)
+
+bighorn_u=ggplot()+geom_line(data=bighorn_met,aes(x=datetime,y=u_ms))
+ggplotly(bighorn_u)
+
+write_csv(bighorn_met_daily,
+          'N:/Research/Kampf/Private/field_data/bighorn/bighorn_met_daily.csv')
 
 ```
 
