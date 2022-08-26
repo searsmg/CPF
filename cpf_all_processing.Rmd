@@ -68,6 +68,9 @@ names(dataframes3) <- substr(filenames3, 1, 25)
 lapply(names(dataframes3), function(x) assign(x, dataframes3[[x]], envir = .GlobalEnv))
 rm(dataframes3)
 
+#set wd back
+setwd('N:/Research/Kampf/Private/field_data')
+
 ```
 
 ## Rain and precip
@@ -223,6 +226,8 @@ write_csv(tunnel_geonor, 'Tunnel_geonor_daily.csv')
 
 ## Met data
 
+### Bighorn met data
+
 ```{r met}
 
 #update all this code later
@@ -277,8 +282,52 @@ ggplotly(bighorn_RH)
 bighorn_u=ggplot()+geom_line(data=bighorn_met,aes(x=datetime,y=u_ms))
 ggplotly(bighorn_u)
 
-write_csv(bighorn_met_daily,
-          'N:/Research/Kampf/Private/field_data/bighorn/bighorn_met_daily.csv')
+write_csv(bighorn_met_daily, 'bighorn_met_daily.csv')
+
+```
+
+### Dry Creek met data
+
+```{r dry creek met data}
+dry_met=read_csv('./dry_creek/dry_met_composite.csv')
+dry_met <- dry_met %>%
+  mutate(datetime = parse_date_time(DateTime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')))
+
+
+
+```
+
+### Joe Wright met station
+
+```{r}
+
+```
+
+
+### Joe Wright burn met station
+
+```{r}
+
+```
+
+
+### Tunnel met station
+
+```{r}
+
+```
+
+### Mt Campus met station
+
+```{r}
+
+```
+
+## Stream stage and stream flow
+
+```{r}
 
 ```
 
