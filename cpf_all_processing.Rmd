@@ -295,13 +295,88 @@ dry_met <- dry_met %>%
                                   orders = c('%m/%d/%Y %H:%M',
                                              '%y-%m-%d %H:%M')))
 
+dry_met$datetime = as.POSIXct(dry_met$datetime,tz="GMT",format="%m/%d/%Y %H")
+dry_met$date=date(dry_met$datetime)
 
+dry_met$VWC_20=ifelse(dry_met$VWC_20<0.08,NA,dry_met$VWC_20)
+dry_met$VWC_50=ifelse(dry_met$VWC_50<0.08,NA,dry_met$VWC_50)
+
+dry_met_daily=group_by(dry_met,date) %>%
+  summarize(Ta_C=mean(Ta_C,na.rm=T),Ts_C=mean(Ts_C,na.rm=T),SM_5=mean(VWC_5),SM_20=mean(VWC_20),
+            SM_50=mean(VWC_50),Rn=mean(Rn_Wm2),SnowD_cm=mean(SnowD_m)*100,RH=mean(RH_frac),
+            u_ms=mean(u_ms))
+
+dry_sm=ggplot()+geom_line(data=dry_met_daily,aes(x=date,y=SM_5),color='red')+
+  geom_line(data=dry_met_daily,aes(x=date,y=SM_20),color='orange')+
+  geom_line(data=dry_met_daily,aes(x=date,y=SM_50),color='blue')
+ggplotly(dry_sm)
+
+dry_Rn=ggplot()+geom_line(data=dry_met_daily,aes(x=date,y=Rn))
+ggplotly(dry_Rn)
+
+dry_T=ggplot()+geom_line(data=dry_met_daily,aes(x=date,y=Ts_C))+
+  geom_line(data=dry_met_daily,aes(x=date,y=Ta_C),color='blue')
+ggplotly(dry_T)
+
+dry_snow=ggplot()+geom_line(data=dry_met_daily,aes(x=date,y=SnowD_cm))
+ggplotly(dry_snow)
+
+dry_RH=ggplot()+geom_line(data=dry_met_daily,aes(x=date,y=RH))
+ggplotly(dry_RH)
+
+dry_u=ggplot()+geom_line(data=dry_met_daily,aes(x=date,y=u_ms))
+ggplotly(dry_u)
+
+write_csv(dry_met_daily,'dry_met_daily.csv')
 
 ```
 
 ### Joe Wright met station
 
 ```{r}
+joewright_met=read_csv('joewright_met_composite.csv')
+
+joewright_met <- joewright_met %>%
+  mutate(datetime = parse_date_time(datetime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')))
+
+#joewright_met$datetime = as_datetime(joewright_met$datetime,tz="MST", format="%m/%d/%Y %H:%M")
+joewright_met$datetime = as.POSIXct(joewright_met$datetime,tz="GMT",format="%m/%d/%Y %H")
+joewright_met$date=date(joewright_met$datetime)
+
+joewright_met_daily=group_by(joewright_met,date) %>%
+  summarize(Ta_C=mean(Ta_C),Ts_C=mean(Ts_C),SM_5=mean(VWC_5),SM_20=mean(VWC_20),
+            SM_50=mean(VWC_50),Rs_in=mean(Rs_in_Wm2),Rs_out=mean(Rs_out_Wm2),Rl_in=mean(Rl_in_Wm2),
+            Rl_out=mean(Rl_out_Wm2),albedo=mean(albedo),Rn=mean(Rn_Wm2),RH=mean(RH_percent)/100,
+            u_ms=mean(u_ms))
+
+jw_sm=ggplot()+geom_line(data=joewright_met,aes(x=datetime,y=VWC_5),color='red')+
+  geom_line(data=joewright_met,aes(x=datetime,y=VWC_20),color='orange')+
+  geom_line(data=joewright_met,aes(x=datetime,y=VWC_50),color='blue')
+ggplotly(jw_sm)
+
+jw_Rs=ggplot()+geom_line(data=joewright_met,aes(x=datetime,y=Rs_in_Wm2))+
+  geom_line(data=joewright_met,aes(x=datetime,y=Rs_out_Wm2),color='orange')
+ggplotly(jw_Rs)
+
+jw_Rl=ggplot()+geom_line(data=joewright_met,aes(x=datetime,y=Rl_in_Wm2))+
+  geom_line(data=joewright_met,aes(x=datetime,y=Rl_out_Wm2),color='orange')+
+  geom_line(data=joewright_met,aes(x=datetime,y=Rn_Wm2),color='blue')
+ggplotly(jw_Rl)
+
+jw_T=ggplot()+geom_line(data=joewright_met,aes(x=datetime,y=Ts_C))+
+  geom_line(data=joewright_met,aes(x=datetime,y=Ta_C),color='blue')
+ggplotly(jw_T)
+
+jw_RH=ggplot()+geom_line(data=joewright_met,aes(x=datetime,y=RH_percent))
+ggplotly(jw_RH)
+
+jw_u=ggplot()+geom_line(data=joewright_met,aes(x=datetime,y=u_ms))
+ggplotly(jw_u)
+
+write_csv(joewright_met_daily,'joewright_met_daily.csv')
+
 
 ```
 
@@ -316,6 +391,56 @@ dry_met <- dry_met %>%
 ### Tunnel met station
 
 ```{r}
+tunnel_met=read_csv('tunnel_met_composite.csv')
+
+tunnel_met <- tunnel_met %>%
+  mutate(datetime = parse_date_time(DateTime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%y-%m-%d %H:%M')))
+
+#tunnel_met$datetime = as_datetime(tunnel_met$DateTime,tz="MST", format="%m/%d/%Y %H:%M")
+tunnel_met$datetime = as.POSIXct(tunnel_met$datetime,tz="GMT",format="%m/%d/%Y %H")
+tunnel_met$date=date(tunnel_met$datetime)
+
+tunnel_met$Depth_cm=tunnel_met$Depth_m*100
+
+tunnel_met_daily=group_by(tunnel_met,date) %>%
+  summarize(Ta_C=mean(Ta_C),Ts_C=mean(Ts_C),SM_5=mean(VWC_5),SM_20=mean(VWC_20),
+            SM_50=mean(VWC_50),Rs_in=mean(Rs_in),Rs_out=mean(Rs_out),Rl_in=mean(Rl_in),
+            Rl_out=mean(Rl_out),albedo=mean(albedo),Rn_NRlite=mean(Rn_Wm2),RH=mean(RH)/100,
+            u_ms=mean(u_ms))
+
+tunnel_sm=ggplot()+geom_line(data=tunnel_met,aes(x=datetime,y=VWC_5),color='red')+
+  geom_line(data=tunnel_met,aes(x=datetime,y=VWC_20),color='orange')+
+  geom_line(data=tunnel_met,aes(x=datetime,y=VWC_50),color='blue')
+ggplotly(tunnel_sm)
+
+tunnel_Rs=ggplot()+geom_line(data=tunnel_met,aes(x=datetime,y=Rs_in))+
+  geom_line(data=tunnel_met,aes(x=datetime,y=Rs_out),color='orange')
+ggplotly(tunnel_Rs)
+#there are times when out is greater than in
+
+tunnel_Rl=ggplot()+geom_line(data=tunnel_met,aes(x=datetime,y=Rl_in))+
+  geom_line(data=tunnel_met,aes(x=datetime,y=Rl_out),color='orange')+
+  geom_line(data=tunnel_met,aes(x=datetime,y=Rn_Wm2),color='blue')
+ggplotly(tunnel_Rl)
+#no 4 comp radiometer 7/21 to 9/21
+
+tunnel_T=ggplot()+geom_line(data=tunnel_met,aes(x=datetime,y=Ts_C))+
+  geom_line(data=tunnel_met,aes(x=datetime,y=Ta_C),color='blue')
+ggplotly(tunnel_T)
+
+tunnel_RH=ggplot()+geom_line(data=tunnel_met,aes(x=datetime,y=RH))
+ggplotly(tunnel_RH)
+
+tunnel_u=ggplot()+geom_line(data=tunnel_met,aes(x=datetime,y=u_ms))
+ggplotly(tunnel_u)
+
+tunnel_snow=ggplot()+geom_line(data=tunnel_met,aes(x=datetime,y=Depth_cm))
+ggplotly(tunnel_snow)
+#needs to be offset adjusted for 0 snow depth
+
+write_csv(tunnel_met_daily,'tunnel_met_daily.csv')
 
 ```
 
