@@ -5,7 +5,7 @@ library(tidyverse)
 
 setwd("D:/CPF/manual_Q")
 
-q <- read_csv("D:/CPF/manual_Q/tunnel_q_20220708.csv") %>%
+q <- read_csv("D:/CPF/manual_Q/tunnel_q_20220829.csv") %>%
   mutate(dist_m = dist_m - lag(dist_m)) %>%
   replace(is.na(.), 0) %>%
   mutate(depth_m = depth_cm / 100) %>%
