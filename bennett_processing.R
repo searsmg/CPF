@@ -30,7 +30,8 @@ me_rain <- me_rain_compos %>%
   mutate(datetime = parse_date_time(datetime, 
                                   orders = c('%m/%d/%Y %H:%M',
                                              '%m/%d/%y %I:%M:%S %p',
-                                             '%m-%d-%y %H:%M')))
+                                             '%m-%d-%y %H:%M',
+                                             '%Y-%m-%d %H:%M')))
 rm(me_rain_compos)
 
 #mm rain
@@ -67,7 +68,9 @@ rm(um_rain_compos)
 #uw rain
 uw_rain <- uw_rain_compos %>%
   mutate(site = "uw") %>%
-  mutate(datetime = mdy_hm(datetime))
+  mutate(datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%Y-%m-%d %H:%M')))
   
 rm(uw_rain_compos)
   
@@ -85,6 +88,16 @@ rain_plot <- ggplot(rain_daily, aes(x=date, y=dailyp_mm, color=site)) +
   ylim(0,50)
 
 ggplotly(rain_plot)
+
+## need to write to csv so can be used to determine rainfall metrics
+
+#rain with precip amounts
+rain <- rain %>%
+  mutate(precip_mm = 0.254)
+
+write.csv(rain, 'bennett_all_rain.csv')
+
+write.csv(rain_daily, 'rain_daily.csv')
 
 ################################################
 ## stage
