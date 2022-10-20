@@ -106,82 +106,109 @@ write.csv(rain_daily, 'rain_daily.csv')
 ## rainfall metrics
 ###############################################
 
-#get events
-me_events <- RMprep(me_rain, prep.type = 2, date.type = 2,
-                tz = 'MST')
+#get events function
+get_setup <- function(df, datetime) {
+  
+  df$datetime = as.POSIXct(df$datetime,tz="MST", format="%m/%d/%Y %H:%M")
+  df$datenumeric=as.numeric(df$datetime)
+
+  #calculate time between tips
+  for (i in 2:nrow(df)) {
+    df[i,'dt']=df[i,'datenumeric']-df[i-1,'datenumeric']
+  }
+  df$dt_hr=as.numeric(df$dt)/60/60
+  
+  #start new event if time between tips >=6
+  df$event=1
+  for (i in 2:nrow(df)) {
+    df[i,'event']=ifelse(df[i,'dt_hr']<6,df[i-1,'event'],df[i-1,'event']+1)
+  }
+  df$P_in = 0.01
+  df$P_mm = 0.254
+  
+  return(df)
+}
+
+#run the function to set up rain df
+me_rain <- get_setup(me_rain, me_rain$datetime)
+
+#function to summarize by event
+get_events <- function(df, event, P_mm, datenumeric, end, start) {
+  df_event=group_by(df,event) %>%
+    summarize(P=sum(P_mm),start=min(datenumeric),
+              end=max(datenumeric),duration=end-start)
+  df_event$duration_hr=df_event$duration/60/60
+  
+  return(df_event)
+}
+
+#run function 
+me_events <- get_events(me_rain, me_rain$P_mm, me_rain$datenumeric,
+                       me_rain$end, me$rain_start)
 
 
-me_events <- RMevents(me_events, ieHr = 6,
-                      rainthresh = .254,
-                      rain = 'precip_mm',
-                      time = 'datetime')
-
-me_events <- me_events$storms2
-
-me_events <- me_events %>%
-  mutate(duration_hr = as.numeric((EndDate - StartDate) / 60 / 60),
-         StartDate = as.numeric(StartDate),
-         EndDate = as.numeric(EndDate)) 
-
-#####################################################
-#resample each event to 5, 15, 30, 60 min intervals
-
-intensity <- function(df_event, duration_hr, start = 'start', end,
-                      df_precip, datetime, P_mm) {
+#function for resampling to 5,10,15,30,60 min intervals
+get_intensities <- function(df_event, event, df) {
+  
   for (i in 1:nrow(df_event)) {
-    t5_rows=as.numeric(round(df_event[i,duration_hr]*60/5))+1
-    start=as.numeric(df_event[i,start])
-    end=as.numeric(df_event[i,end])
+    t5_rows=as.numeric(round(df_event[i,'duration_hr']*60/5))+1
+    start=as.numeric(df_event[i,'start'])
+    end=as.numeric(df_event[i,'end'])
     t5_time=as.data.frame(seq(from=start,to=end,by=300))
-    event=filter(df_precip,event==i)
+    event=filter(df,event==i)
     for (k in 1:t5_rows) {
       sub=filter(event,datetime>=t5_time[k,1]&datetime<t5_time[k+1,1])
-      t5_time[k,P_mm]=nrow(sub)*0.254
+      t5_time[k,'P_mm']=nrow(sub)*0.254
     }
-    df_event[i,'MI5']=max(t5_time[,P_mm],na.rm=T)*12
+    df_event[i,'MI5']=max(t5_time[,'P_mm'],na.rm=T)*12
     
-    t15_rows=as.numeric(round(df_event[i,duration_hr]*60/15))+1
+    t15_rows=as.numeric(round(df_event[i,'duration_hr']*60/15))+1
     t15_time=as.data.frame(seq(from=start,to=end,by=900))
-    event=filter(df_precip,event==i)
-    if (df_event[i,duration_hr]>0.25) {
+    event=filter(df,event==i)
+    if (df_event[i,'duration_hr']>0.25) {
       for (k in 1:t15_rows) {
         sub=filter(event,datetime>=t15_time[k,1]&datetime<t15_time[k+1,1])
-        t15_time[k,P_mm]=nrow(sub)*0.254
+        t15_time[k,'P_mm']=nrow(sub)*0.254
       }
-      df_event[i,'MI15']=max(t15_time[,P_mm],na.rm=T)*4
-    } else df_event[i,'MI15']=sum(event[,P_mm])*4
+      df_event[i,'MI15']=max(t15_time[,'P_mm'],na.rm=T)*4
+    } else df_event[i,'MI15']=sum(event[,'P_mm'])*4
     
-    t30_rows=as.numeric(round(df_event[i,duration_hr]*2))+1
+    t30_rows=as.numeric(round(df_event[i,'duration_hr']*2))+1
     t30_time=as.data.frame(seq(from=start,to=end,by=1800))
-    event=filter(df_precip,event==i)
-    if (df_event[i,duration_hr]>0.5) {
+    event=filter(df,event==i)
+    if (df_event[i,'duration_hr']>0.5) {
       for (k in 1:t30_rows) {
         sub=filter(event,datetime>=t30_time[k,1]&datetime<t30_time[k+1,1])
-        t30_time[k,P_mm]=nrow(sub)*0.254
+        t30_time[k,'P_mm']=nrow(sub)*0.254
       }
-      df_event[i,'MI30']=max(t30_time[,P_mm],na.rm=T)*2
-    } else { df_event[i,'MI30']=sum(event[,P_mm])*2 }
+      df_event[i,'MI30']=max(t30_time[,'P_mm'],na.rm=T)*2
+    } else { df_event[i,'MI30']=sum(event[,'P_mm'])*2 }
     
-    t60_rows=as.numeric(round(df_event[i,duration_hr]))+1
+    t60_rows=as.numeric(round(df_event[i,'duration_hr']))+1
     t60_time=as.data.frame(seq(from=start,to=end,by=3600))
-    event=filter(df_precip,event==i)
-    if (df_event[i,duration_hr]>1) {
+    event=filter(df,event==i)
+    if (df_event[i,'duration_hr']>1) {
       for (k in 1:t60_rows) {
         sub=filter(event,datetime>=t60_time[k,1]&datetime<t60_time[k+1,1])
-        t60_time[k,P_mm]=nrow(sub)*0.254
+        t60_time[k,'P_mm']=nrow(sub)*0.254
       } 
-      df_event[i,'MI60']=max(t60_time[,P_mm],na.rm=T)
-    } else {df_event[i,'MI60']=sum(event[,P_mm])}
+      df_event[i,'MI60']=max(t60_time[,'P_mm'],na.rm=T)
+    } else {df_event[i,'MI60']=sum(event[,'P_mm'])}
   }
+  
+  df_event$starttime=as_datetime(df_event$start)
+  df_event$endtime=as_datetime(df_event$end)
+  
+  return(df_event)
 }
-#################################################
+
+#run intensities function
+me_events <- get_intensities(me_events, me_events$event, me_rain)
+
+write_csv(me_events, 'me_rain_events.csv')
 
 
-intensity(me_events, me_events$duration_hr, start = me_events$StartDate, me_events$EndDate,
-          me_rain, me_rain$datetime, me_rain$precip_mm)
 
-
-#get intensities 
 
 ################################################
 ## stage
