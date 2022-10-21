@@ -1,0 +1,331 @@
+---
+title: "Bennett_dataprocessing"
+author: "Megan Sears"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: journal
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(stringr)
+library(lubridate)
+library(plotly)
+library(kableExtra)
+
+#load rainfall metric functions
+load('rain_metrics.RData')
+
+```
+
+```{r loading data, include=FALSE}
+setwd("N:/Research/Kampf/Private/field_data/bennett")
+
+#pull in all filenames with composite
+filenames <- list.files(".", pattern="composite", full.names=F)
+
+#read all the csvs
+dataframes <- lapply(filenames, read.csv)
+
+#name all the csv
+names(dataframes) <- substr(filenames, 1, 14)
+
+#extract csvs from list to global env
+lapply(names(dataframes), function(x) assign(x, dataframes[[x]], envir = .GlobalEnv))
+rm(dataframes) #remove dataframes list
+```
+
+## Rainfall (via tipping buckets)
+
+```{r initial processing, echo=FALSE}
+#me rain
+me_rain <- me_rain_compos %>%
+  mutate(site = "me") %>%
+  rename(datetime = 1) %>%
+  mutate(datetime = parse_date_time(datetime, 
+                                  orders = c('%m/%d/%Y %H:%M',
+                                             '%m/%d/%y %I:%M:%S %p',
+                                             '%m-%d-%y %H:%M',
+                                             '%Y-%m-%d %H:%M')),
+         precip_mm = 0.254)
+
+rm(me_rain_compos)
+
+#mm rain
+mm_rain <- mm_rain_compos %>%
+  mutate(site = "mm") %>%
+  mutate(datetime = ymd_hm(datetime),
+         precip_mm = 0.254)
+
+rm(mm_rain_compos)
+  
+#mw rain
+mw_rain <- mw_rain_compos %>%
+  mutate(site = "mw") %>%
+  mutate(datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%Y-%m-%d %H:%M')),
+         precip_mm = 0.254)
+
+rm(mw_rain_compos)
+
+#ue rain
+ue_rain <- ue_rain_compos %>%
+  mutate(site = "ue") %>%
+  mutate(datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%m/%d/%y %I:%M:%S %p',
+                                               '%Y-%m-%d %H:%M')),
+         precip_mm = 0.254)
+
+rm(ue_rain_compos)
+
+#um rain
+um_rain <- um_rain_compos %>%
+  mutate(site = "um") %>%
+  mutate(datetime = mdy_hm(datetime),
+         precip_mm = 0.254)
+
+rm(um_rain_compos)
+
+#uw rain
+uw_rain <- uw_rain_compos %>%
+  mutate(site = "uw") %>%
+  mutate(datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%Y-%m-%d %H:%M')),
+         precip_mm = 0.254)
+  
+rm(uw_rain_compos)
+  
+#bind all rain data together
+rain <- bind_rows(me_rain, mm_rain, mw_rain, ue_rain, um_rain, uw_rain)
+
+rain_daily <- rain %>%
+  mutate(date = date(datetime)) %>%
+  group_by(site, date) %>%
+  summarize(dailyp_mm = sum(precip_mm)) 
+
+rain_plot <- ggplot(rain_daily, aes(x=date, y=dailyp_mm, color=site)) +
+  geom_point() + 
+  ylim(0,50)
+
+ggplotly(rain_plot)
+
+## need to write to csv so can be used to determine rainfall metrics
+write.csv(rain, 'bennett_all_rain.csv')
+write.csv(rain_daily, 'rain_daily.csv')
+
+```
+
+### Rainfall metrics
+
+```{r rainfall metrics, echo=FALSE}
+#me 
+me_rain <- get_setup(me_rain, me_rain$datetime)
+me_events <- get_events(me_rain, me_rain$P_mm, me_rain$datenumeric,
+                       me_rain$end, me$rain_start)
+me_events <- get_intensities(me_events, me_events$event, me_rain)
+
+write_csv(me_events, 'me_rain_events.csv')
+
+#mm
+mm_rain <- get_setup(mm_rain, mm_rain$datetime)
+mm_events <- get_events(mm_rain, mm_rain$P_mm, mm_rain$datenumeric,
+                       mm_rain$end, mm$rain_start)
+mm_events <- get_intensities(mm_events, mm_events$event, mm_rain)
+
+write_csv(mm_events, 'mm_rain_events.csv')
+
+#mw
+mw_rain <- get_setup(mw_rain, mw_rain$datetime)
+mw_events <- get_events(mw_rain, mw_rain$P_mm, mw_rain$datenumeric,
+                       mw_rain$end, mw$rain_start)
+mw_events <- get_intensities(mw_events, mw_events$event, mw_rain)
+
+write_csv(mw_events, 'mw_rain_events.csv')
+
+#ue
+ue_rain <- get_setup(ue_rain, ue_rain$datetime)
+ue_events <- get_events(ue_rain, ue_rain$P_mm, ue_rain$datenumeric,
+                       ue_rain$end, ue$rain_start)
+ue_events <- get_intensities(ue_events, ue_events$event, ue_rain)
+
+write_csv(ue_events, 'ue_rain_events.csv')
+
+#um
+um_rain <- get_setup(um_rain, um_rain$datetime)
+um_events <- get_events(um_rain, um_rain$P_mm, um_rain$datenumeric,
+                       um_rain$end, um$rain_start)
+um_events <- get_intensities(um_events, um_events$event, um_rain)
+
+write_csv(um_events, 'um_rain_events.csv')
+
+#uw
+uw_rain <- get_setup(uw_rain, uw_rain$datetime)
+uw_events <- get_events(uw_rain, uw_rain$P_mm, uw_rain$datenumeric,
+                       uw_rain$end, uw$rain_start)
+uw_events <- get_intensities(uw_events, uw_events$event, uw_rain)
+
+write_csv(uw_events, 'uw_rain_events.csv')
+
+#add site id to each events df 
+me_events <- me_events %>% mutate(Site = 'me')
+mm_events <- mm_events %>% mutate(Site = 'mm')
+mw_events <- mw_events %>% mutate(Site = 'mw')
+ue_events <- ue_events %>% mutate(Site = 'ue')
+um_events <- um_events %>% mutate(Site = 'um')
+uw_events <- uw_events %>% mutate(Site = 'uw')
+
+#bind event dfs together
+event_list <- list(me_events, mm_events, mw_events,
+                   ue_events, um_events, uw_events)
+
+#all events for all sites
+events <- bind_rows(event_list)
+
+ggplot(events, aes(x=Site, y=P)) + geom_boxplot()
+
+ggplot(events, aes(x=Site, y=MI60)) + geom_boxplot() +
+  scale_y_continuous(breaks = seq(0,24,2))
+
+ggplot(events, aes(x=Site, y=MI30)) + geom_boxplot() 
+
+ggplot(events, aes(x=Site, y=MI15)) + geom_boxplot()
+
+ggplot(events, aes(x=Site, y=MI5)) + geom_boxplot()
+
+events_summary <- events %>%
+  select(c(Site, P, MI60, MI30, MI15, MI5, P)) %>%
+  group_by(Site) %>%
+  summarize(Count = n(),
+            Median_P = median(P),
+            Mean_P = mean(P),
+            Stdev_P = sd(P),
+            Median_MI60 = median(MI60),
+            Mean_MI60 = mean(MI60),
+            Stdev_MI60 = sd(MI60),
+            Median_MI30 = median(MI30),
+            Mean_MI30 = mean(MI30),
+            Stdev_MI30 = sd(MI30),
+            Median_MI15 = median(MI15),
+            Median_MI5 = median(MI5),
+            Mean_MI15 = mean(MI15),
+            Stdev_MI15 = sd(MI15),
+            Mean_MI5 = mean(MI5),
+            Stdev_MI5 = sd(MI5)) %>%
+  mutate_if(is.numeric,
+            round,
+            digits = 2)
+
+events_summary
+
+kable(events_summary)
+
+```
+
+## Stream stage
+
+```{r process stage data, echo=FALSE}
+
+#me stage
+me_stage <- me_stage_compo %>%
+  mutate(site = 'me',
+         datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%m-%d-%Y %H:%M:%S')))
+rm(me_stage_compo)
+
+#me_upper stage
+me_upper_stage <- me_upper_stage %>%
+  mutate(site = 'me_upper',
+         datetime = mdy_hms(datetime))
+
+#mm stage
+mm_stage <- mm_stage_compo %>%
+  mutate(site = 'mm',
+         datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%m/%d/%Y %H:%M:%S')))
+rm(mm_stage_compo)
+
+#mm upper stage
+mm_upper_stage <- mm_upper_stage %>%
+  mutate(site = 'mm_upper',
+         datetime = mdy_hms(datetime))
+
+#mw stage
+mw_stage <- mw_stage_compo %>%
+  mutate(site = 'mw',
+         datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%m/%d/%Y %H:%M:%S')))
+rm(mw_stage_compo)
+
+#mw_upper stage
+mw_upper_stage <- mw_upper_stage %>%
+  mutate(site = 'mw_upper',
+         datetime = mdy_hms(datetime))
+
+#ue stage
+ue_stage <- ue_stage_compo %>%
+  mutate(site = 'ue',
+         datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%m/%d/%Y %H:%M:%S')))
+rm(ue_stage_compo)
+
+#ue_upper stage (not downloaded yet)
+ue_upper_stage <- ue_upper_stage %>%
+  mutate(site = 'ue_upper',
+         datetime = mdy_hms(datetime))
+
+#um stage
+um_stage <- um_stage_compo %>%
+  mutate(site = 'um',
+         datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%m/%d/%Y %H:%M:%S')))
+
+rm(um_stage_compo)
+
+#um_lower stage
+um_lower_stage <- um_lower_stage %>%
+  mutate(site = 'um_lower',
+         datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%m/%d/%Y %H:%M:%S')))
+#uw stage
+uw_stage <- uw_stage_compo %>%
+  mutate(site = 'uw',
+         datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%m-%d-%Y %H:%M:%S')))
+
+rm(uw_stage_compo)
+
+#uw_upper stage
+uw_upper_stage <- uw_upper_stage %>%
+  mutate(site = 'uw_upper',
+         datetime = mdy_hms(datetime))
+
+stage <- bind_rows(me_stage, me_upper_stage, mm_stage, mm_upper_stage,
+                   mw_stage, mw_upper_stage, ue_stage, ue_upper_stage, um_stage, um_lower_stage,
+                   uw_stage, uw_upper_stage)
+
+stage_plot <- ggplot(stage, aes(x=datetime, y=Stage_mm, color=site)) +
+  geom_line()
+
+ggplotly(stage_plot)
+
+write.csv(stage, 'bennett_stage.csv')
+
+
+```
+
