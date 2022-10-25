@@ -224,9 +224,8 @@ events_summary <- events %>%
             round,
             digits = 2)
 
-events_summary
-
-kable(events_summary)
+kable(events_summary) %>%
+  kable_styling()
 
 ```
 
