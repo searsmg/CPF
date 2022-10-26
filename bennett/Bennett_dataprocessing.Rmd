@@ -202,18 +202,23 @@ event_list <- list(me_events, mm_events, mw_events,
 #all events for all sites
 events <- bind_rows(event_list)
 
-ggplot(events, aes(x=Site, y=P)) + geom_boxplot()
+ggplot(events, aes(x=Site, y=P)) + geom_boxplot() +
+  ggtitle('Precip per event (mm)')
 
-ggplot(events, aes(x=Site, y=duration_hr)) + geom_boxplot()
+ggplot(events, aes(x=Site, y=duration_hr)) + geom_boxplot() +
+  ggtitle('Event duration (hr)')
 
-ggplot(events, aes(x=Site, y=MI60)) + geom_boxplot() #+
-  #scale_y_continuous(breaks = seq(0,24,2))
+ggplot(events, aes(x=Site, y=MI60)) + geom_boxplot() +
+  ggtitle('MI60')
 
-ggplot(events, aes(x=Site, y=MI30)) + geom_boxplot() 
+ggplot(events, aes(x=Site, y=MI30)) + geom_boxplot() +
+  ggtitle('MI30')
 
-ggplot(events, aes(x=Site, y=MI15)) + geom_boxplot()
+ggplot(events, aes(x=Site, y=MI15)) + geom_boxplot() +
+  ggtitle('MI15')
 
-ggplot(events, aes(x=Site, y=MI5)) + geom_boxplot()
+ggplot(events, aes(x=Site, y=MI5)) + geom_boxplot()+
+  ggtitle('MI5')
 
 events_summary <- events %>%
   select(c(Site, P, MI60, MI30, MI15, MI5, P)) %>%
