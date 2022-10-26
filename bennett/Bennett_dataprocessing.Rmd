@@ -53,7 +53,8 @@ me_rain <- me_rain_compos %>%
                                              '%m/%d/%y %I:%M:%S %p',
                                              '%m-%d-%y %H:%M',
                                              '%Y-%m-%d %H:%M')),
-         precip_mm = 0.254)
+         precip_mm = 0.254) %>%
+  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
 
 rm(me_rain_compos)
 
@@ -61,7 +62,8 @@ rm(me_rain_compos)
 mm_rain <- mm_rain_compos %>%
   mutate(site = "mm") %>%
   mutate(datetime = ymd_hm(datetime),
-         precip_mm = 0.254)
+         precip_mm = 0.254) %>%
+  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
 
 rm(mm_rain_compos)
   
@@ -71,7 +73,8 @@ mw_rain <- mw_rain_compos %>%
   mutate(datetime = parse_date_time(datetime, 
                                     orders = c('%m/%d/%Y %H:%M',
                                                '%Y-%m-%d %H:%M')),
-         precip_mm = 0.254)
+         precip_mm = 0.254) %>%
+  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
 
 rm(mw_rain_compos)
 
@@ -82,7 +85,8 @@ ue_rain <- ue_rain_compos %>%
                                     orders = c('%m/%d/%Y %H:%M',
                                                '%m/%d/%y %I:%M:%S %p',
                                                '%Y-%m-%d %H:%M')),
-         precip_mm = 0.254)
+         precip_mm = 0.254) %>%
+  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
 
 rm(ue_rain_compos)
 
@@ -90,7 +94,8 @@ rm(ue_rain_compos)
 um_rain <- um_rain_compos %>%
   mutate(site = "um") %>%
   mutate(datetime = mdy_hm(datetime),
-         precip_mm = 0.254)
+         precip_mm = 0.254) %>%
+  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
 
 rm(um_rain_compos)
 
@@ -100,7 +105,8 @@ uw_rain <- uw_rain_compos %>%
   mutate(datetime = parse_date_time(datetime, 
                                     orders = c('%m/%d/%Y %H:%M',
                                                '%Y-%m-%d %H:%M')),
-         precip_mm = 0.254)
+         precip_mm = 0.254) %>%
+  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
   
 rm(uw_rain_compos)
   
@@ -128,52 +134,58 @@ write.csv(rain_daily, 'rain_daily.csv')
 
 ```{r rainfall metrics, echo=FALSE}
 #me 
-me_rain <- get_setup(me_rain, me_rain$datetime)
-me_events <- get_events(me_rain, me_rain$P_mm, me_rain$datenumeric,
-                       me_rain$end, me$rain_start)
-me_events <- get_intensities(me_events, me_events$event, me_rain)
+# me_rain <- get_setup(me_rain, me_rain$datetime)
+# me_events <- get_events(me_rain, me_rain$P_mm, me_rain$datenumeric,
+#                        me_rain$end, me$rain_start)
+# me_events <- get_intensities(me_events, me_events$event, me_rain)
 
-write_csv(me_events, 'me_rain_events.csv')
+#write_csv(me_events, 'me_rain_events.csv')
+me_events <- read_csv('me_rain_events.csv')
 
 #mm
-mm_rain <- get_setup(mm_rain, mm_rain$datetime)
-mm_events <- get_events(mm_rain, mm_rain$P_mm, mm_rain$datenumeric,
-                       mm_rain$end, mm$rain_start)
-mm_events <- get_intensities(mm_events, mm_events$event, mm_rain)
-
-write_csv(mm_events, 'mm_rain_events.csv')
+# mm_rain <- get_setup(mm_rain, mm_rain$datetime)
+# mm_events <- get_events(mm_rain, mm_rain$P_mm, mm_rain$datenumeric,
+#                        mm_rain$end, mm$rain_start)
+# mm_events <- get_intensities(mm_events, mm_events$event, mm_rain)
+# 
+# write_csv(mm_events, 'mm_rain_events.csv')
+mm_events <- read_csv('mm_rain_events.csv')
 
 #mw
-mw_rain <- get_setup(mw_rain, mw_rain$datetime)
-mw_events <- get_events(mw_rain, mw_rain$P_mm, mw_rain$datenumeric,
-                       mw_rain$end, mw$rain_start)
-mw_events <- get_intensities(mw_events, mw_events$event, mw_rain)
-
-write_csv(mw_events, 'mw_rain_events.csv')
+# mw_rain <- get_setup(mw_rain, mw_rain$datetime)
+# mw_events <- get_events(mw_rain, mw_rain$P_mm, mw_rain$datenumeric,
+#                        mw_rain$end, mw$rain_start)
+# mw_events <- get_intensities(mw_events, mw_events$event, mw_rain)
+# 
+# write_csv(mw_events, 'mw_rain_events.csv')
+mw_events <- read_csv('mw_rain_events.csv')
 
 #ue
-ue_rain <- get_setup(ue_rain, ue_rain$datetime)
-ue_events <- get_events(ue_rain, ue_rain$P_mm, ue_rain$datenumeric,
-                       ue_rain$end, ue$rain_start)
-ue_events <- get_intensities(ue_events, ue_events$event, ue_rain)
-
-write_csv(ue_events, 'ue_rain_events.csv')
+# ue_rain <- get_setup(ue_rain, ue_rain$datetime)
+# ue_events <- get_events(ue_rain, ue_rain$P_mm, ue_rain$datenumeric,
+#                        ue_rain$end, ue$rain_start)
+# ue_events <- get_intensities(ue_events, ue_events$event, ue_rain)
+# 
+# write_csv(ue_events, 'ue_rain_events.csv')
+ue_events <- read_csv('ue_rain_events.csv')
 
 #um
-um_rain <- get_setup(um_rain, um_rain$datetime)
-um_events <- get_events(um_rain, um_rain$P_mm, um_rain$datenumeric,
-                       um_rain$end, um$rain_start)
-um_events <- get_intensities(um_events, um_events$event, um_rain)
-
-write_csv(um_events, 'um_rain_events.csv')
+# um_rain <- get_setup(um_rain, um_rain$datetime)
+# um_events <- get_events(um_rain, um_rain$P_mm, um_rain$datenumeric,
+#                        um_rain$end, um$rain_start)
+# um_events <- get_intensities(um_events, um_events$event, um_rain)
+# 
+# write_csv(um_events, 'um_rain_events.csv')
+um_events <- read_csv('um_rain_events.csv')
 
 #uw
-uw_rain <- get_setup(uw_rain, uw_rain$datetime)
-uw_events <- get_events(uw_rain, uw_rain$P_mm, uw_rain$datenumeric,
-                       uw_rain$end, uw$rain_start)
-uw_events <- get_intensities(uw_events, uw_events$event, uw_rain)
-
-write_csv(uw_events, 'uw_rain_events.csv')
+# uw_rain <- get_setup(uw_rain, uw_rain$datetime)
+# uw_events <- get_events(uw_rain, uw_rain$P_mm, uw_rain$datenumeric,
+#                        uw_rain$end, uw$rain_start)
+# uw_events <- get_intensities(uw_events, uw_events$event, uw_rain)
+# 
+# write_csv(uw_events, 'uw_rain_events.csv')
+uw_events <- read_csv('uw_rain_events.csv')
 
 #add site id to each events df 
 me_events <- me_events %>% mutate(Site = 'me')
@@ -192,8 +204,10 @@ events <- bind_rows(event_list)
 
 ggplot(events, aes(x=Site, y=P)) + geom_boxplot()
 
-ggplot(events, aes(x=Site, y=MI60)) + geom_boxplot() +
-  scale_y_continuous(breaks = seq(0,24,2))
+ggplot(events, aes(x=Site, y=duration_hr)) + geom_boxplot()
+
+ggplot(events, aes(x=Site, y=MI60)) + geom_boxplot() #+
+  #scale_y_continuous(breaks = seq(0,24,2))
 
 ggplot(events, aes(x=Site, y=MI30)) + geom_boxplot() 
 
@@ -324,6 +338,14 @@ stage_plot <- ggplot(stage, aes(x=datetime, y=Stage_mm, color=site)) +
 ggplotly(stage_plot)
 
 write.csv(stage, 'bennett_stage.csv')
+
+
+```
+
+```{r stage response, echo = FALSE}
+
+# me_response <- me_stage %>%
+#   filter(datetime >= me_rain$start[i] | <= me_rain$end[i] )
 
 
 ```
