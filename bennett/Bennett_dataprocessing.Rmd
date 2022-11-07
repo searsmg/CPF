@@ -54,7 +54,8 @@ me_rain <- me_rain_compos %>%
                                              '%m-%d-%y %H:%M',
                                              '%Y-%m-%d %H:%M')),
          precip_mm = 0.254) %>%
-  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
+  filter(!between(datetime, as.POSIXct('2021-10-31 00:00:00', tz='MST'),
+                                as.POSIXct('2022-05-05 00:00:00', tz='MST')))
 
 rm(me_rain_compos)
 
@@ -63,7 +64,8 @@ mm_rain <- mm_rain_compos %>%
   mutate(site = "mm") %>%
   mutate(datetime = ymd_hm(datetime),
          precip_mm = 0.254) %>%
-  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
+  filter(!between(datetime, as.POSIXct('2021-10-31 00:00:00', tz='MST'),
+                                as.POSIXct('2022-05-05 00:00:00', tz='MST')))
 
 rm(mm_rain_compos)
   
@@ -74,8 +76,8 @@ mw_rain <- mw_rain_compos %>%
                                     orders = c('%m/%d/%Y %H:%M',
                                                '%Y-%m-%d %H:%M')),
          precip_mm = 0.254) %>%
-  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
-
+  filter(!between(datetime, as.POSIXct('2021-10-31 00:00:00', tz='MST'),
+                                as.POSIXct('2022-05-05 00:00:00', tz='MST')))
 rm(mw_rain_compos)
 
 #ue rain
@@ -86,7 +88,8 @@ ue_rain <- ue_rain_compos %>%
                                                '%m/%d/%y %I:%M:%S %p',
                                                '%Y-%m-%d %H:%M')),
          precip_mm = 0.254) %>%
-  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
+  filter(!between(datetime, as.POSIXct('2021-10-31 00:00:00', tz='MST'),
+                                as.POSIXct('2022-05-05 00:00:00', tz='MST')))
 
 rm(ue_rain_compos)
 
@@ -95,7 +98,8 @@ um_rain <- um_rain_compos %>%
   mutate(site = "um") %>%
   mutate(datetime = mdy_hm(datetime),
          precip_mm = 0.254) %>%
-  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
+  filter(!between(datetime, as.POSIXct('2021-10-31 00:00:00', tz='MST'),
+                                as.POSIXct('2022-05-05 00:00:00', tz='MST')))
 
 rm(um_rain_compos)
 
@@ -106,7 +110,8 @@ uw_rain <- uw_rain_compos %>%
                                     orders = c('%m/%d/%Y %H:%M',
                                                '%Y-%m-%d %H:%M')),
          precip_mm = 0.254) %>%
-  filter(!datetime > '2022-05-05 00:00:00' | datetime > '2021-10-31 00:00:00')
+  filter(!between(datetime, as.POSIXct('2021-10-31 00:00:00', tz='MST'),
+                                as.POSIXct('2022-05-05 00:00:00', tz='MST')))
   
 rm(uw_rain_compos)
   
@@ -136,36 +141,36 @@ write.csv(rain_daily, 'rain_daily.csv')
 #me 
 # me_rain <- get_setup(me_rain, me_rain$datetime)
 # me_events <- get_events(me_rain, me_rain$P_mm, me_rain$datenumeric,
-#                        me_rain$end, me$rain_start)
+#                         me_rain$end, me$rain_start)
 # me_events <- get_intensities(me_events, me_events$event, me_rain)
-
-#write_csv(me_events, 'me_rain_events.csv')
+# 
+# write_csv(me_events, 'me_rain_events.csv')
 me_events <- read_csv('me_rain_events.csv')
 
 #mm
 # mm_rain <- get_setup(mm_rain, mm_rain$datetime)
 # mm_events <- get_events(mm_rain, mm_rain$P_mm, mm_rain$datenumeric,
-#                        mm_rain$end, mm$rain_start)
+#                         mm_rain$end, mm$rain_start)
 # mm_events <- get_intensities(mm_events, mm_events$event, mm_rain)
-# 
+#  
 # write_csv(mm_events, 'mm_rain_events.csv')
 mm_events <- read_csv('mm_rain_events.csv')
 
 #mw
 # mw_rain <- get_setup(mw_rain, mw_rain$datetime)
 # mw_events <- get_events(mw_rain, mw_rain$P_mm, mw_rain$datenumeric,
-#                        mw_rain$end, mw$rain_start)
+#                         mw_rain$end, mw$rain_start)
 # mw_events <- get_intensities(mw_events, mw_events$event, mw_rain)
-# 
+#  
 # write_csv(mw_events, 'mw_rain_events.csv')
 mw_events <- read_csv('mw_rain_events.csv')
 
 #ue
 # ue_rain <- get_setup(ue_rain, ue_rain$datetime)
 # ue_events <- get_events(ue_rain, ue_rain$P_mm, ue_rain$datenumeric,
-#                        ue_rain$end, ue$rain_start)
+#                         ue_rain$end, ue$rain_start)
 # ue_events <- get_intensities(ue_events, ue_events$event, ue_rain)
-# 
+#  
 # write_csv(ue_events, 'ue_rain_events.csv')
 ue_events <- read_csv('ue_rain_events.csv')
 
@@ -181,9 +186,9 @@ um_events <- read_csv('um_rain_events.csv')
 #uw
 # uw_rain <- get_setup(uw_rain, uw_rain$datetime)
 # uw_events <- get_events(uw_rain, uw_rain$P_mm, uw_rain$datenumeric,
-#                        uw_rain$end, uw$rain_start)
+#                         uw_rain$end, uw$rain_start)
 # uw_events <- get_intensities(uw_events, uw_events$event, uw_rain)
-# 
+ 
 # write_csv(uw_events, 'uw_rain_events.csv')
 uw_events <- read_csv('uw_rain_events.csv')
 
@@ -221,7 +226,7 @@ ggplot(events, aes(x=Site, y=MI5)) + geom_boxplot()+
   ggtitle('MI5')
 
 events_summary <- events %>%
-  select(c(Site, P, MI60, MI30, MI15, MI5, P)) %>%
+  select(c(Site, P, MI60, MI30, MI15, MI5)) %>%
   group_by(Site) %>%
   summarize(Count = n(),
             Median_P = median(P),
@@ -347,10 +352,139 @@ write.csv(stage, 'bennett_stage.csv')
 
 ```
 
+## Stage response to rainfall
+
 ```{r stage response, echo = FALSE}
 
-# me_response <- me_stage %>%
-#   filter(datetime >= me_rain$start[i] | <= me_rain$end[i] )
+#get stage response for each site
+me_response <- get_stageresponse(me_events, me_stage)
+mm_response <- get_stageresponse(mm_events, mm_stage)
+mw_response <- get_stageresponse(mw_events, mw_stage)
+ue_response <- get_stageresponse(ue_events, ue_stage)
+um_response <- get_stageresponse(um_events, um_stage)
+uw_response <- get_stageresponse(uw_events, uw_stage)
+
+response_list <- list(me_response, mm_response, mw_response,
+                   ue_response, um_response, uw_response)
+
+#all events for all sites
+response <- bind_rows(response_list)
+
+ggplot(response, aes(x=site, y=)) + geom_boxplot() +
+  ggtitle('Stage response amount (mm)')
+
+ggplot(response, aes(x=site, y=Stage_range)) + geom_boxplot() +
+  ggtitle('Stage response amount (mm)')
+
+ggplot(response, aes(x=site, y=lag2p_hr)) + geom_boxplot() +
+  ggtitle('Lag to Peak (hr)')
+
+ggplot(response, aes(x=site, y=Stage_mm_max)) + geom_boxplot() +
+  ggtitle('Stage max (mm)')
+
+ggplot(response, aes(x=MI60, y=lag2p_hr, color = site)) + geom_point() +
+  ggtitle('MI60 vs lag to peak')
+
+ggplot(response, aes(x=MI60, y=Stage_range, color = site)) + geom_point() +
+  ggtitle('MI60 vs stage max')
+
+ggplot(response, aes(x=MI60, y=Stage_range, color = site)) + geom_point() +
+  ggtitle('MI60 vs stage max')
+
+response_summary <- response %>%
+  ungroup() %>% 
+  select(c(site, Stage_mm_max, Stage_range, lag2p_hr, response)) %>%
+  group_by(site) %>%
+  summarize(Count = n(),
+            Positive_response = sum(response),
+            Median_Stage_response = median(Stage_range),
+            Mean_Stage_response = mean(Stage_range),
+            Stdev_Stage_response = sd(Stage_range),
+            Median_lag2p_hr = median(lag2p_hr),
+            Mean_lag2p_hr = mean(lag2p_hr),
+            Stdev_lag2p_hr = sd(lag2p_hr)) %>%
+  mutate_if(is.numeric,
+            round,
+            digits = 2)
+
+ggplot(response_summary, aes(x=site, y=(Positive_response/Count))) + 
+  geom_col() +
+  ggtitle('Percent of response (response to events/total events)')
+
+kable(response_summary) %>%
+  kable_styling()
+
+
+```
+
+## Rainfall thresholds
+
+```{r rainfall thresholds, echo = FALSE}
+
+# thresholds=data.frame(seq(0, 30, by = 0.1))
+# 
+# #identify threshold for one site
+# site=me_response
+# site=filter(site,!is.na(site$Stage))
+# site=filter(site,!is.na(site$MI60))
+# num=32
+# 
+# #flow_pred is the threshold prediction of flow for MI15, 30, 60
+# #correct indicatese whether the threshold prediction is correct
+# flow_pred_15=data.frame(matrix(0, ncol = num, nrow = 301))  
+# flow_pred_30=data.frame(matrix(0, ncol = num, nrow = 301))  
+# flow_pred_60=data.frame(matrix(0, ncol = num, nrow = 301))  
+# correct_15=data.frame(matrix(0, ncol = num, nrow = 301))  
+# correct_30=data.frame(matrix(0, ncol = num, nrow = 301))  
+# correct_60=data.frame(matrix(0, ncol = num, nrow = 301))  
+# 
+# for(j in seq(from=1, to=num, by=1)){
+#   for(i in seq(from=1, to=301, by=1)){
+#     flow_pred_15[i,j]=ifelse(site[j,5]>thresholds[i,1],1,0)
+#     flow_pred_30[i,j]=ifelse(site[j,6]>thresholds[i,1],1,0)
+#     flow_pred_60[i,j]=ifelse(site[j,7]>thresholds[i,1],1,0)
+#     correct_15[i,j]=ifelse(flow_pred_15[i,j]==site[j,8],1,0)
+#     correct_30[i,j]=ifelse(flow_pred_30[i,j]==site[j,8],1,0)
+#     correct_60[i,j]=ifelse(flow_pred_60[i,j]==site[j,8],1,0)
+#   }
+# }
+# 
+# #computes fraction correct for each threshold value; also computes kappa stat
+# p0_15=data.frame(matrix(0, ncol = 1, nrow = 301))
+# p0_30=data.frame(matrix(0, ncol = 1, nrow = 301))
+# p0_60=data.frame(matrix(0, ncol = 1, nrow = 301))
+# pflow_obs=sum(site[c(1:num),8])/num
+# pnoflow_obs=1-pflow_obs
+# pflow_15=data.frame(matrix(0, ncol = 1, nrow = 301))
+# pflow_30=data.frame(matrix(0, ncol = 1, nrow = 301))
+# pflow_60=data.frame(matrix(0, ncol = 1, nrow = 301))
+# pnoflow_15=data.frame(matrix(0, ncol = 1, nrow = 301))
+# pnoflow_30=data.frame(matrix(0, ncol = 1, nrow = 301))
+# pnoflow_60=data.frame(matrix(0, ncol = 1, nrow = 301))
+# pe_15=data.frame(matrix(0, ncol = 1, nrow = 301))
+# pe_30=data.frame(matrix(0, ncol = 1, nrow = 301))
+# pe_60=data.frame(matrix(0, ncol = 1, nrow = 301))
+# kappa_15=data.frame(matrix(0, ncol = 1, nrow = 301))
+# kappa_30=data.frame(matrix(0, ncol = 1, nrow = 301))
+# kappa_60=data.frame(matrix(0, ncol = 1, nrow = 301))
+# 
+# for(i in seq(from=1, to=301, by=1)){
+#   p0_15[i,1]=sum(correct_15[i,c(1:num)])/num
+#   p0_30[i,1]=sum(correct_30[i,c(1:num)])/num
+#   p0_60[i,1]=sum(correct_60[i,c(1:num)])/num
+#   pflow_15[i,1]=sum(flow_pred_15[i,c(1:num)])/num
+#   pflow_30[i,1]=sum(flow_pred_30[i,c(1:num)])/num
+#   pflow_60[i,1]=sum(flow_pred_60[i,c(1:num)])/num
+#   pnoflow_15[i,1]=1-pflow_15[i,1]
+#   pnoflow_30[i,1]=1-pflow_30[i,1]
+#   pnoflow_60[i,1]=1-pflow_60[i,1]
+#   pe_15[i,1]=pflow_obs*pflow_15[i,1]+pnoflow_obs*pnoflow_15[i,1]
+#   pe_30[i,1]=pflow_obs*pflow_30[i,1]+pnoflow_obs*pnoflow_30[i,1]
+#   pe_60[i,1]=pflow_obs*pflow_60[i,1]+pnoflow_obs*pnoflow_60[i,1]
+#   kappa_15[i,1]=(p0_15[i,1]-pe_15[i,1])/(1-pe_15[i,1])
+#   kappa_30[i,1]=(p0_30[i,1]-pe_30[i,1])/(1-pe_30[i,1])
+#   kappa_60[i,1]=(p0_60[i,1]-pe_60[i,1])/(1-pe_60[i,1])
+# }  
 
 
 ```
