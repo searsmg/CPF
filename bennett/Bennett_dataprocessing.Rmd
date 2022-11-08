@@ -18,6 +18,7 @@ library(stringr)
 library(lubridate)
 library(plotly)
 library(kableExtra)
+library(here)
 
 #load rainfall metric functions
 load('rain_metrics.RData')
@@ -370,9 +371,6 @@ response_list <- list(me_response, mm_response, mw_response,
 #all events for all sites
 response <- bind_rows(response_list)
 
-ggplot(response, aes(x=site, y=)) + geom_boxplot() +
-  ggtitle('Stage response amount (mm)')
-
 ggplot(response, aes(x=site, y=Stage_range)) + geom_boxplot() +
   ggtitle('Stage response amount (mm)')
 
@@ -384,9 +382,6 @@ ggplot(response, aes(x=site, y=Stage_mm_max)) + geom_boxplot() +
 
 ggplot(response, aes(x=MI60, y=lag2p_hr, color = site)) + geom_point() +
   ggtitle('MI60 vs lag to peak')
-
-ggplot(response, aes(x=MI60, y=Stage_range, color = site)) + geom_point() +
-  ggtitle('MI60 vs stage max')
 
 ggplot(response, aes(x=MI60, y=Stage_range, color = site)) + geom_point() +
   ggtitle('MI60 vs stage max')
@@ -485,6 +480,32 @@ kable(response_summary) %>%
 #   kappa_30[i,1]=(p0_30[i,1]-pe_30[i,1])/(1-pe_30[i,1])
 #   kappa_60[i,1]=(p0_60[i,1]-pe_60[i,1])/(1-pe_60[i,1])
 # }  
+
+
+```
+
+## Larimer County Bennett precip and Q
+
+```{r larimer co rainfall metrics, echo = FALSE}
+#how to get rainfall metrics when it is hourly
+# ben_rain <- read_csv(here('./bennett/larimerco_bennett_precip.csv')) %>%
+#   mutate(datetime = ymd_hm(DateTime)) %>%
+#   mutate(precip_mm = precip_in*25.4) %>%
+#   filter(datetime > '2021-06-21 00:00') %>%
+#   filter(!between(datetime, as.POSIXct('2021-10-31 00:00', tz='MST'),
+#                                 as.POSIXct('2022-05-05 00:00', tz='MST')))
+# 
+#   
+# 
+# 
+# ben_rain <- get_setup(ben_rain, ben_rain$datetime)
+# 
+# ben_events <- get_events(ben_rain, ben_rain$P_mm, ben_rain$datenumeric,
+#                         ben_rain$end, ben_rain$rain_start)
+# 
+# 
+# ue_events <- get_intensities(ue_events, ue_events$event, ben_rain)
+
 
 
 ```
