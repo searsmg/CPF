@@ -510,3 +510,22 @@ kable(response_summary) %>%
 
 ```
 
+## Looking at stage during 
+
+```{r snowmlet, echo = FALSE}
+
+#taking a look at me stage
+mw_stage_snow <- mw_stage %>%
+    filter(between(datetime, as.POSIXct('2022-03-30 00:00:00', tz='MST'),
+                                as.POSIXct('2022-05-05 00:00:00', tz='MST')))
+
+
+mw_snow <- ggplot(mw_stage_snow, aes(x=datetime, y=Stage_mm)) + geom_line()
+
+ggplotly(mw_snow)
+
+
+
+
+```
+
