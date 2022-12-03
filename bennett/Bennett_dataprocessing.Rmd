@@ -40,6 +40,7 @@ names(dataframes) <- substr(filenames, 1, 14)
 #extract csvs from list to global env
 lapply(names(dataframes), function(x) assign(x, dataframes[[x]], envir = .GlobalEnv))
 rm(dataframes) #remove dataframes list
+
 ```
 
 ## Rainfall (via tipping buckets)
@@ -131,67 +132,80 @@ rain_plot <- ggplot(rain_daily, aes(x=date, y=dailyp_mm, color=site)) +
 ggplotly(rain_plot)
 
 ## need to write to csv so can be used to determine rainfall metrics
-write.csv(rain, 'bennett_all_rain.csv')
-write.csv(rain_daily, 'rain_daily.csv')
+#write.csv(rain, 'bennett_all_rain.csv')
+#write.csv(rain_daily, 'rain_daily.csv')
 
 ```
 
 ### Rainfall metrics
 
 ```{r rainfall metrics, echo=FALSE}
+
+get_events <- function(df, event, P_mm, datenumeric, end, start) {
+  df_event=group_by(df,event) %>%
+    summarize(P=sum(P_mm),start=min(datenumeric),
+              end=max(datenumeric),duration=end-start)
+  df_event$duration_hr=df_event$duration/60/60
+  
+  #df_event <- df_event %>% filter(P > 1)
+  
+  return(df_event)
+}
+
+
 #me 
-# me_rain <- get_setup(me_rain, me_rain$datetime)
-# me_events <- get_events(me_rain, me_rain$P_mm, me_rain$datenumeric,
-#                         me_rain$end, me$rain_start)
-# me_events <- get_intensities(me_events, me_events$event, me_rain)
-# 
-# write_csv(me_events, 'me_rain_events.csv')
-me_events <- read_csv('me_rain_events.csv')
+me_rain <- get_setup(me_rain, me_rain$datetime)
+me_events <- get_events(me_rain, me_rain$P_mm, me_rain$datenumeric,
+                        me_rain$end, me$rain_start)
+me_events <- get_intensities(me_events, me_events$event, me_rain)
+
+#write_csv(me_events, 'me_rain_events.csv')
+#me_events <- read_csv('me_rain_events.csv')
 
 #mm
-# mm_rain <- get_setup(mm_rain, mm_rain$datetime)
-# mm_events <- get_events(mm_rain, mm_rain$P_mm, mm_rain$datenumeric,
-#                         mm_rain$end, mm$rain_start)
-# mm_events <- get_intensities(mm_events, mm_events$event, mm_rain)
-#  
+mm_rain <- get_setup(mm_rain, mm_rain$datetime)
+mm_events <- get_events(mm_rain, mm_rain$P_mm, mm_rain$datenumeric,
+                        mm_rain$end, mm$rain_start)
+mm_events <- get_intensities(mm_events, mm_events$event, mm_rain)
+
 # write_csv(mm_events, 'mm_rain_events.csv')
-mm_events <- read_csv('mm_rain_events.csv')
+# mm_events <- read_csv('mm_rain_events.csv')
 
 #mw
-# mw_rain <- get_setup(mw_rain, mw_rain$datetime)
-# mw_events <- get_events(mw_rain, mw_rain$P_mm, mw_rain$datenumeric,
-#                         mw_rain$end, mw$rain_start)
-# mw_events <- get_intensities(mw_events, mw_events$event, mw_rain)
-#  
+mw_rain <- get_setup(mw_rain, mw_rain$datetime)
+mw_events <- get_events(mw_rain, mw_rain$P_mm, mw_rain$datenumeric,
+                        mw_rain$end, mw$rain_start)
+mw_events <- get_intensities(mw_events, mw_events$event, mw_rain)
+
 # write_csv(mw_events, 'mw_rain_events.csv')
-mw_events <- read_csv('mw_rain_events.csv')
+# mw_events <- read_csv('mw_rain_events.csv')
 
 #ue
-# ue_rain <- get_setup(ue_rain, ue_rain$datetime)
-# ue_events <- get_events(ue_rain, ue_rain$P_mm, ue_rain$datenumeric,
-#                         ue_rain$end, ue$rain_start)
-# ue_events <- get_intensities(ue_events, ue_events$event, ue_rain)
-#  
+ue_rain <- get_setup(ue_rain, ue_rain$datetime)
+ue_events <- get_events(ue_rain, ue_rain$P_mm, ue_rain$datenumeric,
+                        ue_rain$end, ue$rain_start)
+ue_events <- get_intensities(ue_events, ue_events$event, ue_rain)
+
 # write_csv(ue_events, 'ue_rain_events.csv')
-ue_events <- read_csv('ue_rain_events.csv')
+# ue_events <- read_csv('ue_rain_events.csv')
 
 #um
-# um_rain <- get_setup(um_rain, um_rain$datetime)
-# um_events <- get_events(um_rain, um_rain$P_mm, um_rain$datenumeric,
-#                        um_rain$end, um$rain_start)
-# um_events <- get_intensities(um_events, um_events$event, um_rain)
-# 
+um_rain <- get_setup(um_rain, um_rain$datetime)
+um_events <- get_events(um_rain, um_rain$P_mm, um_rain$datenumeric,
+                       um_rain$end, um$rain_start)
+um_events <- get_intensities(um_events, um_events$event, um_rain)
+
 # write_csv(um_events, 'um_rain_events.csv')
-um_events <- read_csv('um_rain_events.csv')
+# um_events <- read_csv('um_rain_events.csv')
 
 #uw
-# uw_rain <- get_setup(uw_rain, uw_rain$datetime)
-# uw_events <- get_events(uw_rain, uw_rain$P_mm, uw_rain$datenumeric,
-#                         uw_rain$end, uw$rain_start)
-# uw_events <- get_intensities(uw_events, uw_events$event, uw_rain)
- 
-# write_csv(uw_events, 'uw_rain_events.csv')
-uw_events <- read_csv('uw_rain_events.csv')
+uw_rain <- get_setup(uw_rain, uw_rain$datetime)
+uw_events <- get_events(uw_rain, uw_rain$P_mm, uw_rain$datenumeric,
+                        uw_rain$end, uw$rain_start)
+uw_events <- get_intensities(uw_events, uw_events$event, uw_rain)
+
+# # write_csv(uw_events, 'uw_rain_events.csv')
+#uw_events <- read_csv('uw_rain_events.csv')
 
 #add site id to each events df 
 me_events <- me_events %>% mutate(Site = 'me')
@@ -230,24 +244,21 @@ events_summary <- events %>%
   select(c(Site, P, MI60, MI30, MI15, MI5)) %>%
   group_by(Site) %>%
   summarize(Count = n(),
+            Total_P = sum(P),
             Median_P = median(P),
             Mean_P = mean(P),
             Stdev_P = sd(P),
-            Median_MI60 = median(MI60),
             Mean_MI60 = mean(MI60),
             Stdev_MI60 = sd(MI60),
-            Median_MI30 = median(MI30),
             Mean_MI30 = mean(MI30),
             Stdev_MI30 = sd(MI30),
-            Median_MI15 = median(MI15),
-            Median_MI5 = median(MI5),
             Mean_MI15 = mean(MI15),
             Stdev_MI15 = sd(MI15),
             Mean_MI5 = mean(MI5),
             Stdev_MI5 = sd(MI5)) %>%
   mutate_if(is.numeric,
             round,
-            digits = 2)
+            digits = 4)
 
 kable(events_summary) %>%
   kable_styling()
@@ -348,7 +359,7 @@ stage_plot <- ggplot(stage, aes(x=datetime, y=Stage_mm, color=site)) +
 
 ggplotly(stage_plot)
 
-write.csv(stage, 'bennett_stage.csv')
+#write.csv(stage, 'bennett_stage.csv')
 
 
 ```
@@ -510,22 +521,105 @@ kable(response_summary) %>%
 
 ```
 
-## Looking at stage during 
-
-```{r snowmlet, echo = FALSE}
-
-#taking a look at me stage
-mw_stage_snow <- mw_stage %>%
-    filter(between(datetime, as.POSIXct('2022-03-30 00:00:00', tz='MST'),
-                                as.POSIXct('2022-05-05 00:00:00', tz='MST')))
+```{r}
 
 
-mw_snow <- ggplot(mw_stage_snow, aes(x=datetime, y=Stage_mm)) + geom_line()
+get_stageresponse2 <- function(events_df, stage_df) {
+  
+  response <- data.frame()
+  
+  for(i in 1:nrow(events_df)){
+    temp <- stage_df %>%
+      filter(datetime >=(events_df$starttime[i]) 
+             & datetime <=(events_df$endtime[i] + 12*60*60))
+    
+    temp$event = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                        & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                        events_df$event[i])
+    
+    temp$duration_hr = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                              & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                              events_df$duration_hr[i])
+    
+    temp$P = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                    & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                    events_df$P[i])
+    
+    temp$MI5 = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                      & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                      events_df$MI5[i])
+    
+    temp$MI15 = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                       & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                       events_df$MI15[i])
+    
+    temp$MI30 = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                       & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                       events_df$MI30[i])
+    
+    temp$MI60 = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                       & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                       events_df$MI60[i])
+    
+    temp$starttime = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                            & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                            events_df$starttime[i])
+    
+    temp$endtime = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                          & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                          events_df$endtime[i])
+    
+    response <- rbind(response, temp)
+  }
+  
+  out <- response %>%
+    group_by(event) %>%
+    mutate(Stage_range = max(Stage_mm) - min(Stage_mm)) %>%
+    group_by(event) %>%
+    filter(Stage_mm == max(Stage_mm)) %>%
+    rename(Stage_mm_max = Stage_mm) %>% 
+    group_by(event) %>%
+    filter(datetime == max(datetime)) %>%
+    rename(datetime_maxstage = datetime) %>%
+    mutate(starttime_rain = as_datetime(starttime),
+           endtime_rain = as_datetime(endtime),
+           lag2p_hr = as.numeric(datetime_maxstage - starttime_rain)) %>%
+    filter(!duration_hr == 0) %>%
+    mutate(response = ifelse(Stage_range > 2, 1, 0)) %>% 
+    select(-c(starttime, endtime))
+  
+}
 
-ggplotly(mw_snow)
 
+me_response <- get_stageresponse2(me_events, me_stage)
+mm_response <- get_stageresponse2(mm_events, mm_stage)
+mw_response <- get_stageresponse2(mw_events, mw_stage)
+ue_response <- get_stageresponse2(ue_events, ue_stage)
+um_response <- get_stageresponse2(um_events, um_stage)
+uw_response <- get_stageresponse2(uw_events, uw_stage)
 
+response_list <- list(me_response, mm_response, mw_response,
+                   ue_response, um_response, uw_response)
+
+#all events for all sites
+response <- bind_rows(response_list)
+
+response_summary <- response %>%
+  ungroup() %>% 
+  select(c(site, Stage_mm_max, Stage_range, lag2p_hr, response)) %>%
+  group_by(site) %>%
+  summarize(Count = n(),
+            Positive_response = sum(response),
+            Max_Stage_Response = max(Stage_range),
+            Median_Stage_response = median(Stage_range),
+            Mean_Stage_response = mean(Stage_range),
+            Stdev_Stage_response = sd(Stage_range),
+            Median_lag2p_hr = median(lag2p_hr),
+            Mean_lag2p_hr = mean(lag2p_hr),
+            Stdev_lag2p_hr = sd(lag2p_hr)) %>%
+  mutate_if(is.numeric,
+            round,
+            digits = 2)
 
 
 ```
-
