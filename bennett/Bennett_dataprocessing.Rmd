@@ -19,14 +19,14 @@ library(lubridate)
 library(plotly)
 library(kableExtra)
 library(here)
-
-#load rainfall metric functions
-load('rain_metrics.RData')
-
 ```
+
 
 ```{r loading data, include=FALSE}
 setwd("N:/Research/Kampf/Private/field_data/bennett")
+
+#load rainfall metric functions
+load('rain_metrics.RData')
 
 #pull in all filenames with composite
 filenames <- list.files(".", pattern="composite", full.names=F)
@@ -140,10 +140,10 @@ ggplotly(rain_plot)
 ### Rainfall metrics
 
 ```{r rainfall metrics, echo=FALSE}
-
+# REMOVE THE FILTER P<1 and do it before summarizing below
 get_events <- function(df, event, P_mm, datenumeric, end, start) {
   df_event=group_by(df,event) %>%
-    summarize(P=sum(P_mm),start=min(datenumeric),
+    summarize(P=sum(P_mm, na.rm=T),start=min(datenumeric),
               end=max(datenumeric),duration=end-start)
   df_event$duration_hr=df_event$duration/60/60
   
@@ -163,9 +163,14 @@ me_events <- get_intensities(me_events, me_events$event, me_rain)
 #me_events <- read_csv('me_rain_events.csv')
 
 #mm
+#use gap fill mm_rain (gap filled with me)
+mm_rain <- read_csv("mm_rain_gapfill.csv") %>%
+  mutate(datetime = ymd_hm(datetime))
+
 mm_rain <- get_setup(mm_rain, mm_rain$datetime)
 mm_events <- get_events(mm_rain, mm_rain$P_mm, mm_rain$datenumeric,
-                        mm_rain$end, mm$rain_start)
+                       mm_rain$end, mm$rain_start)
+
 mm_events <- get_intensities(mm_events, mm_events$event, mm_rain)
 
 # write_csv(mm_events, 'mm_rain_events.csv')
@@ -189,7 +194,7 @@ ue_events <- get_intensities(ue_events, ue_events$event, ue_rain)
 # write_csv(ue_events, 'ue_rain_events.csv')
 # ue_events <- read_csv('ue_rain_events.csv')
 
-#um
+#um -- use uw since there is no um data
 um_rain <- get_setup(um_rain, um_rain$datetime)
 um_events <- get_events(um_rain, um_rain$P_mm, um_rain$datenumeric,
                        um_rain$end, um$rain_start)
@@ -208,12 +213,29 @@ uw_events <- get_intensities(uw_events, uw_events$event, uw_rain)
 #uw_events <- read_csv('uw_rain_events.csv')
 
 #add site id to each events df 
-me_events <- me_events %>% mutate(Site = 'me')
-mm_events <- mm_events %>% mutate(Site = 'mm')
-mw_events <- mw_events %>% mutate(Site = 'mw')
-ue_events <- ue_events %>% mutate(Site = 'ue')
-um_events <- um_events %>% mutate(Site = 'um')
-uw_events <- uw_events %>% mutate(Site = 'uw')
+me_events <- me_events %>% 
+  mutate(Site = 'me') %>%
+  filter(P > 1)
+
+mm_events <- mm_events %>% 
+  mutate(Site = 'mm') %>%
+  filter(P > 1)
+
+mw_events <- mw_events %>% 
+  mutate(Site = 'mw') %>%
+  filter(P > 1)
+
+ue_events <- ue_events %>% 
+  mutate(Site = 'ue') %>%
+  filter(P > 1)
+
+um_events <- um_events %>% 
+  mutate(Site = 'um') %>%
+  filter(P > 1)
+
+uw_events <- uw_events %>% 
+  mutate(Site = 'uw') %>%
+  filter(P > 1)
 
 #bind event dfs together
 event_list <- list(me_events, mm_events, mw_events,
@@ -221,6 +243,8 @@ event_list <- list(me_events, mm_events, mw_events,
 
 #all events for all sites
 events <- bind_rows(event_list)
+
+events <- events %>% filter(P > 1)
 
 ggplot(events, aes(x=Site, y=P)) + geom_boxplot() +
   ggtitle('Precip per event (mm)')
@@ -244,18 +268,18 @@ events_summary <- events %>%
   select(c(Site, P, MI60, MI30, MI15, MI5)) %>%
   group_by(Site) %>%
   summarize(Count = n(),
-            Total_P = sum(P),
-            Median_P = median(P),
-            Mean_P = mean(P),
-            Stdev_P = sd(P),
-            Mean_MI60 = mean(MI60),
-            Stdev_MI60 = sd(MI60),
-            Mean_MI30 = mean(MI30),
-            Stdev_MI30 = sd(MI30),
-            Mean_MI15 = mean(MI15),
-            Stdev_MI15 = sd(MI15),
-            Mean_MI5 = mean(MI5),
-            Stdev_MI5 = sd(MI5)) %>%
+            Total_P = sum(P, na.rm = TRUE),
+            Median_P = median(P, na.rm = TRUE),
+            Mean_P = mean(P, na.rm = TRUE),
+            Stdev_P = sd(P, na.rm = TRUE),
+            Mean_MI60 = mean(MI60, na.rm = TRUE),
+            Stdev_MI60 = sd(MI60, na.rm = TRUE),
+            Mean_MI30 = mean(MI30, na.rm = TRUE),
+            Stdev_MI30 = sd(MI30, na.rm = TRUE),
+            Mean_MI15 = mean(MI15, na.rm = TRUE),
+            Stdev_MI15 = sd(MI15, na.rm = TRUE),
+            Mean_MI5 = mean(MI5, na.rm = TRUE),
+            Stdev_MI5 = sd(MI5, na.rm = TRUE)) %>%
   mutate_if(is.numeric,
             round,
             digits = 4)
@@ -595,7 +619,7 @@ me_response <- get_stageresponse2(me_events, me_stage)
 mm_response <- get_stageresponse2(mm_events, mm_stage)
 mw_response <- get_stageresponse2(mw_events, mw_stage)
 ue_response <- get_stageresponse2(ue_events, ue_stage)
-um_response <- get_stageresponse2(um_events, um_stage)
+um_response <- get_stageresponse2(uw_events, um_stage)
 uw_response <- get_stageresponse2(uw_events, uw_stage)
 
 response_list <- list(me_response, mm_response, mw_response,
