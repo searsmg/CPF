@@ -430,91 +430,28 @@ kable(response_summary) %>%
 
 ```{r rainfall thresholds, echo = FALSE}
 
-thresholds=data.frame(seq(0, 30, by = 0.1))
-
-#identify threshold for one site
-site=me_response
-site=filter(site,!is.na(site$Stage))
-site=filter(site,!is.na(site$MI60))
-num=32
-
-#flow_pred is the threshold prediction of flow for MI15, 30, 60
-#correct indicatese whether the threshold prediction is correct
-flow_pred_15=data.frame(matrix(0, ncol = num, nrow = 301))
-flow_pred_30=data.frame(matrix(0, ncol = num, nrow = 301))
-flow_pred_60=data.frame(matrix(0, ncol = num, nrow = 301))
-correct_15=data.frame(matrix(0, ncol = num, nrow = 301))
-correct_30=data.frame(matrix(0, ncol = num, nrow = 301))
-correct_60=data.frame(matrix(0, ncol = num, nrow = 301))
-
-for(j in seq(from=1, to=num, by=1)){
-  for(i in seq(from=1, to=301, by=1)){
-    flow_pred_15[i,j]=ifelse(site[j,5]>thresholds[i,1],1,0)
-    flow_pred_30[i,j]=ifelse(site[j,6]>thresholds[i,1],1,0)
-    flow_pred_60[i,j]=ifelse(site[j,7]>thresholds[i,1],1,0)
-    correct_15[i,j]=ifelse(flow_pred_15[i,j]==site[j,8],1,0)
-    correct_30[i,j]=ifelse(flow_pred_30[i,j]==site[j,8],1,0)
-    correct_60[i,j]=ifelse(flow_pred_60[i,j]==site[j,8],1,0)
-  }
-}
-
-#computes fraction correct for each threshold value; also computes kappa stat
-p0_15=data.frame(matrix(0, ncol = 1, nrow = 301))
-p0_30=data.frame(matrix(0, ncol = 1, nrow = 301))
-p0_60=data.frame(matrix(0, ncol = 1, nrow = 301))
-pflow_obs=sum(site[c(1:num),8])/num
-pnoflow_obs=1-pflow_obs
-pflow_15=data.frame(matrix(0, ncol = 1, nrow = 301))
-pflow_30=data.frame(matrix(0, ncol = 1, nrow = 301))
-pflow_60=data.frame(matrix(0, ncol = 1, nrow = 301))
-pnoflow_15=data.frame(matrix(0, ncol = 1, nrow = 301))
-pnoflow_30=data.frame(matrix(0, ncol = 1, nrow = 301))
-pnoflow_60=data.frame(matrix(0, ncol = 1, nrow = 301))
-pe_15=data.frame(matrix(0, ncol = 1, nrow = 301))
-pe_30=data.frame(matrix(0, ncol = 1, nrow = 301))
-pe_60=data.frame(matrix(0, ncol = 1, nrow = 301))
-kappa_15=data.frame(matrix(0, ncol = 1, nrow = 301))
-kappa_30=data.frame(matrix(0, ncol = 1, nrow = 301))
-kappa_60=data.frame(matrix(0, ncol = 1, nrow = 301))
-
-for(i in seq(from=1, to=301, by=1)){
-  p0_15[i,1]=sum(correct_15[i,c(1:num)])/num
-  p0_30[i,1]=sum(correct_30[i,c(1:num)])/num
-  p0_60[i,1]=sum(correct_60[i,c(1:num)])/num
-  pflow_15[i,1]=sum(flow_pred_15[i,c(1:num)])/num
-  pflow_30[i,1]=sum(flow_pred_30[i,c(1:num)])/num
-  pflow_60[i,1]=sum(flow_pred_60[i,c(1:num)])/num
-  pnoflow_15[i,1]=1-pflow_15[i,1]
-  pnoflow_30[i,1]=1-pflow_30[i,1]
-  pnoflow_60[i,1]=1-pflow_60[i,1]
-  pe_15[i,1]=pflow_obs*pflow_15[i,1]+pnoflow_obs*pnoflow_15[i,1]
-  pe_30[i,1]=pflow_obs*pflow_30[i,1]+pnoflow_obs*pnoflow_30[i,1]
-  pe_60[i,1]=pflow_obs*pflow_60[i,1]+pnoflow_obs*pnoflow_60[i,1]
-  kappa_15[i,1]=(p0_15[i,1]-pe_15[i,1])/(1-pe_15[i,1])
-  kappa_30[i,1]=(p0_30[i,1]-pe_30[i,1])/(1-pe_30[i,1])
-  kappa_60[i,1]=(p0_60[i,1]-pe_60[i,1])/(1-pe_60[i,1])
-}
+me_thresh <- get_thresholds(me_response) %>%
+  mutate(site = 'me')
+mm_thresh <- get_thresholds(mm_response) %>%
+  mutate(site = 'mm')
+mw_thresh <- get_thresholds(mw_response) %>%
+  mutate(site = 'mw')
+ue_thresh <- get_thresholds(ue_response) %>%
+  mutate(site = 'ue')
+um_thresh <- get_thresholds(um_response) %>%
+  mutate(site = 'um')
+uw_thresh <- get_thresholds(uw_response) %>%
+  mutate(site = 'uw')
 
 
-summary=tibble(site=c('me'),
-               T_15=c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
-               kappa_15=c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
-               T_30=c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
-               kappa_30=c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
-               T_60=c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
-               kappa_60=c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))
+thresh_list <- list(me_thresh, mm_thresh, mw_thresh,
+                   ue_thresh, um_thresh, uw_thresh)
 
-#this identifies threshold value based on highest kappa
-summary[20,1]='me'
-row=which.max(kappa_15[,1])
-summary[20,2]=thresholds[row,1]
-summary[20,3]=max(kappa_15)
-row=which.max(kappa_30[,1])
-summary[20,4]=thresholds[row,1]
-summary[20,5]=max(kappa_30)
-row=which.max(kappa_60[,1])
-summary[20,6]=thresholds[row,1]
-summary[20,7]=max(kappa_60)
+#all events for all sites
+thresh <- bind_rows(thresh_list)
+
+kable(thresh) %>%
+  kable_styling()
 
 ```
 
