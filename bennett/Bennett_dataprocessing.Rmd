@@ -457,26 +457,153 @@ kable(thresh) %>%
 
 ## Larimer County Bennett precip and Q
 
-```{r larimer co rainfall metrics, echo = FALSE}
-#how to get rainfall metrics when it is hourly
-# ben_rain <- read_csv(here('./bennett/larimerco_bennett_precip.csv')) %>%
-#   mutate(datetime = ymd_hm(DateTime)) %>%
-#   mutate(precip_mm = precip_in*25.4) %>%
-#   filter(datetime > '2021-06-21 00:00') %>%
-#   filter(!between(datetime, as.POSIXct('2021-10-31 00:00', tz='MST'),
-#                                 as.POSIXct('2022-05-05 00:00', tz='MST')))
-# 
-#   
-# 
-# 
-# ben_rain <- get_setup(ben_rain, ben_rain$datetime)
-# 
-# ben_events <- get_events(ben_rain, ben_rain$P_mm, ben_rain$datenumeric,
-#                         ben_rain$end, ben_rain$rain_start)
-# 
-# 
-# ue_events <- get_intensities(ue_events, ue_events$event, ben_rain)
+### Larimer Country Bennett rainfall metrics
 
+```{r larimer co rainfall metrics, echo = FALSE}
+#hourly data
+ben_rain <- read_csv(here('./bennett/larimerco_bennett_precip.csv')) %>%
+  mutate(datetime = ymd_hm(DateTime)) %>%
+  mutate(precip_mm = precip_in*25.4) %>%
+  filter(datetime > '2021-06-21 00:00') %>%
+  filter(!between(datetime, as.POSIXct('2021-10-31 00:00', tz='MST'),
+                                as.POSIXct('2022-05-05 00:00', tz='MST'))) %>%
+  select(datetime, precip_mm) %>%
+  filter(precip_mm > 0)
+
+
+#### need to setup differently since it's not recorded for each tip ####
+get_setup2 <- function(df, datetime, precip_mm) {
+  
+  df$datetime = as.POSIXct(df$datetime,tz="MST", format="%m/%d/%Y %H:%M")
+  df$datenumeric=as.numeric(df$datetime)
+
+  #calculate time between tips
+  for (i in 2:nrow(df)) {
+    df[i,'dt']=df[i,'datenumeric']-df[i-1,'datenumeric']
+  }
+  df$dt_hr=as.numeric(df$dt)/60/60
+  
+  #start new event if time between tips >=6
+  df$event=1
+  for (i in 2:nrow(df)) {
+    df[i,'event']=ifelse(df[i,'dt_hr']<6,df[i-1,'event'],df[i-1,'event']+1)
+  }
+  #df$P_in = 0.01
+  df$P_mm = df$precip_mm
+  
+  return(df)
+}
+####
+
+ben_rain <- get_setup2(ben_rain, ben_rain$datetime)
+
+ben_events <- get_events(ben_rain, ben_rain$precip_mm, ben_rain$datenumeric,
+                        ben_rain$end, ben_rain$rain_start)
+
+
+ben_events <- get_intensities(ben_events, ben_events$event, ben_rain)
+
+ben_events <- ben_events %>%
+  mutate(Site = 'ben')
+
+## look at data
+
+ggplot(ben_events, aes(x=Site, y=P)) + geom_boxplot() +
+  ggtitle('Precip per event (mm)')
+
+ggplot(ben_events, aes(x=Site, y=duration_hr)) + geom_boxplot() +
+  ggtitle('Event duration (hr)')
+
+ggplot(ben_events, aes(x=Site, y=MI60)) + geom_boxplot() +
+  ggtitle('MI60')
+
+# summary
+
+ben_events_summary <- ben_events %>%
+  select(c(Site, P, MI60)) %>%
+  summarize(Count = n(),
+            Total_P = sum(P, na.rm = TRUE),
+            Median_P = median(P, na.rm = TRUE),
+            Max_P = max(P, na.rm = TRUE),
+            Stdev_P = sd(P, na.rm = TRUE),
+            Max_MI60 = max(MI60, na.rm = TRUE),
+            Stdev_MI60 = sd(MI60, na.rm = TRUE)) %>%
+  mutate_if(is.numeric,
+            round,
+            digits = 4)
+
+kable(ben_events_summary) %>%
+  kable_styling()
+
+```
+
+### Larimer County Bennett stage/Q metrics
+
+```{r Larimer co stage, echo = F}
+
+ben_q <- read_csv(here('./bennett/larimerco_bennett_Q.csv')) %>%
+  rename(datetime = DateTime) %>%
+  mutate(datetime = ymd_hm(datetime)) %>% 
+  mutate(q_cms = q_cfs*0.028)
+
+#### get Q response instead of stage ####
+get_Qresponse <- function(events_df, q_df) {
+  
+  response <- data.frame()
+  
+  for(i in 1:nrow(events_df)){
+    temp <- q_df %>%
+      filter(datetime >=(events_df$starttime[i]) 
+             & datetime <=(events_df$endtime[i] + 12*60*60))
+    
+    temp$event = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                        & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                        events_df$event[i])
+    
+    temp$duration_hr = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                              & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                              events_df$duration_hr[i])
+    
+    temp$P = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                    & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                    events_df$P[i])
+    
+    temp$MI60 = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                       & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                       events_df$MI60[i])
+    
+    temp$starttime = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                            & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                            events_df$starttime[i])
+    
+    temp$endtime = ifelse(temp$datetime >=(events_df$starttime[i]) 
+                          & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+                          events_df$endtime[i])
+    
+    response <- rbind(response, temp)
+  }
+  
+  out <- response %>%
+    group_by(event) %>%
+    mutate(q_range = max(q_cms) - min(q_cms)) %>%
+    group_by(event) %>%
+    filter(q_cms == max(q_cms)) %>%
+    rename(q_cms_max = q_cms) %>% 
+    group_by(event) %>%
+    filter(datetime == max(datetime)) %>%
+    rename(datetime_maxq = datetime) %>%
+    mutate(starttime_rain = as_datetime(starttime),
+           endtime_rain = as_datetime(endtime),
+           lag2p_hr = as.numeric(datetime_maxq - starttime_rain)) %>%
+    filter(!duration_hr == 0) %>%
+    #mutate(response = ifelse(Stage_range > 2, 1, 0)) %>% 
+    select(-c(starttime, endtime))
+  
+}
+
+
+ben_response <- get_Qresponse(ben_events, ben_q)
 
 
 ```
+
