@@ -595,8 +595,8 @@ get_Qresponse <- function(events_df, q_df) {
     mutate(starttime_rain = as_datetime(starttime),
            endtime_rain = as_datetime(endtime),
            lag2p_hr = as.numeric(datetime_maxq - starttime_rain)) %>%
-    filter(!duration_hr == 0) %>%
-    #mutate(response = ifelse(Stage_range > 2, 1, 0)) %>% 
+    #filter(!duration_hr == 0) %>% #take this out bc it's not based on tips
+    mutate(response = ifelse(q_range > 0, 1, 0)) %>% 
     select(-c(starttime, endtime))
   
 }
@@ -604,6 +604,37 @@ get_Qresponse <- function(events_df, q_df) {
 
 ben_response <- get_Qresponse(ben_events, ben_q)
 
+ben_response <- ben_response %>% mutate(site = 'ben')
+
+# look at data
+ggplot(ben_response, aes(x=site, y=q_range)) + geom_boxplot() +
+  ggtitle('Q response amount (cms)')
+
+ggplot(ben_response, aes(x=site, y=lag2p_hr)) + geom_boxplot() +
+  ggtitle('Lag to Peak (hr)')
+
+ggplot(ben_response, aes(x=site, y=q_cms_max)) + geom_boxplot() +
+  ggtitle('Q max (cms)')
+
+
+#response summary
+ben_response_summary <- ben_response %>%
+  select(c(site, q_cms_max, q_range, lag2p_hr, response)) %>%
+  group_by(site) %>% 
+  summarize(Count = n(),
+            Positive_response = sum(response),
+            Max_q_Response = max(q_range),
+            Median_q_response = median(q_range),
+            Mean_q_response = mean(q_range),
+            Stdev_q_response = sd(q_range),
+            Median_lag2p_hr = median(lag2p_hr),
+            Mean_lag2p_hr = mean(lag2p_hr),
+            Stdev_lag2p_hr = sd(lag2p_hr)) %>%
+  mutate_if(is.numeric,
+            round,
+            digits = 2)
+
+# all 81 events have responses? so not calculating threshold & kappa
 
 ```
 
