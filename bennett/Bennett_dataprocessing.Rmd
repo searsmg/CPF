@@ -1,5 +1,5 @@
 ---
-title: "Bennett_dataprocessing"
+title: "Bennett rainfall and streamflow response"
 author: "Megan Sears"
 date: "`r Sys.Date()`"
 output:
@@ -12,13 +12,21 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = F,
+                      message = F,
+                      fig.width = 12,
+                      fig.height = 6)
+
 library(tidyverse)
 library(stringr)
 library(lubridate)
 library(plotly)
 library(kableExtra)
 library(here)
+library(ggplot2); theme_set(theme_bw(base_size = 16))
+library(viridis)
+library(gridExtra)
+
 ```
 
 
@@ -43,7 +51,7 @@ rm(dataframes) #remove dataframes list
 
 ```
 
-## Rainfall (via tipping buckets)
+# Daily rainfall (via tipping buckets)
 
 ```{r initial processing, echo=FALSE}
 #me rain
@@ -123,13 +131,25 @@ rain <- bind_rows(me_rain, mm_rain, mw_rain, ue_rain, um_rain, uw_rain)
 rain_daily <- rain %>%
   mutate(date = date(datetime)) %>%
   group_by(site, date) %>%
-  summarize(dailyp_mm = sum(precip_mm)) 
+  summarize(dailyp_mm = sum(precip_mm))
 
-rain_plot <- ggplot(rain_daily, aes(x=date, y=dailyp_mm, color=site)) +
-  geom_point() + 
-  ylim(0,50)
+#daily rain plot
+rain_daily_plot <- rain_daily %>%
+  ungroup() %>% 
+  mutate(year = year(date),
+         treatment = if_else(site %in% c('mm', 'me', 'mw'),
+                             'mulch',
+                             'no mulch')) %>%
+  ggplot(aes(x=date, y=dailyp_mm, 
+             color=site, 
+             shape = treatment)) +
+  geom_point(size =3) + 
+  ylim(0,50) +
+  ggtitle('Daily rainfall') +
+  scale_color_brewer(palette = "Dark2") +
+  facet_wrap(~year, scales = 'free_x')
 
-ggplotly(rain_plot)
+ggplotly(rain_daily_plot)
 
 ## need to write to csv so can be used to determine rainfall metrics
 #write.csv(rain, 'bennett_all_rain.csv')
@@ -137,7 +157,9 @@ ggplotly(rain_plot)
 
 ```
 
-### Rainfall metrics
+# Event-based rainfall metrics
+
+Derived from tipping bucket data
 
 ```{r rainfall metrics, echo=FALSE}
 
@@ -226,40 +248,42 @@ event_list <- list(me_events, mm_events, mw_events,
 #all events for all sites
 events <- bind_rows(event_list)
 
-ggplot(events, aes(x=Site, y=P)) + geom_boxplot() +
+p <- ggplot(events, aes(x=Site, y=P)) + 
+  geom_boxplot() +
   ggtitle('Precip per event (mm)')
 
-ggplot(events, aes(x=Site, y=duration_hr)) + geom_boxplot() +
+dur <- ggplot(events, aes(x=Site, y=duration_hr)) + 
+  geom_boxplot() +
   ggtitle('Event duration (hr)')
 
-ggplot(events, aes(x=Site, y=MI60)) + geom_boxplot() +
-  ggtitle('MI60')
+mi60 <- ggplot(events, aes(x=Site, y=MI60)) + 
+  geom_boxplot() +
+  ggtitle('MI60 (mm/hr)')
 
-ggplot(events, aes(x=Site, y=MI30)) + geom_boxplot() +
-  ggtitle('MI30')
+mi30 <- ggplot(events, aes(x=Site, y=MI30)) + 
+  geom_boxplot() +
+  ggtitle('MI30 (mm/hr)')
 
-ggplot(events, aes(x=Site, y=MI15)) + geom_boxplot() +
-  ggtitle('MI15')
+mi15 <- ggplot(events, aes(x=Site, y=MI15)) + 
+  geom_boxplot() +
+  ggtitle('MI15 (mm/hr)')
 
-ggplot(events, aes(x=Site, y=MI5)) + geom_boxplot()+
-  ggtitle('MI5')
+mi5 <- ggplot(events, aes(x=Site, y=MI5)) + 
+  geom_boxplot()+
+  ggtitle('MI5 (mm/hr)')
+
+grid.arrange(p, dur, mi60, mi30, mi15, mi5, nrow=3)
 
 events_summary <- events %>%
   select(c(Site, P, MI60, MI30, MI15, MI5)) %>%
   group_by(Site) %>%
   summarize(Count = n(),
             Total_P = sum(P, na.rm = TRUE),
-            Median_P = median(P, na.rm = TRUE),
             Max_P = max(P, na.rm = TRUE),
-            Stdev_P = sd(P, na.rm = TRUE),
             Max_MI60 = max(MI60, na.rm = TRUE),
-            Stdev_MI60 = sd(MI60, na.rm = TRUE),
             Max_MI30 = max(MI30, na.rm = TRUE),
-            Stdev_MI30 = sd(MI30, na.rm = TRUE),
             Max_MI15 = max(MI15, na.rm = TRUE),
-            Stdev_MI15 = sd(MI15, na.rm = TRUE),
-            Max_MI5 = max(MI5, na.rm = TRUE),
-            Stdev_MI5 = sd(MI5, na.rm = TRUE)) %>%
+            Max_MI5 = max(MI5, na.rm = TRUE)) %>%
   mutate_if(is.numeric,
             round,
             digits = 4)
@@ -269,7 +293,7 @@ kable(events_summary) %>%
 
 ```
 
-## Stream stage
+# Stream stage
 
 ```{r process stage data, echo=FALSE}
 
@@ -358,16 +382,23 @@ stage <- bind_rows(me_stage, me_upper_stage, mm_stage, mm_upper_stage,
                    mw_stage, mw_upper_stage, ue_stage, ue_upper_stage, um_stage, um_lower_stage,
                    uw_stage, uw_upper_stage)
 
-stage_plot <- ggplot(stage, aes(x=datetime, y=Stage_mm, color=site)) +
-  geom_line()
+stage_plot <- ggplot(stage, aes(x=datetime, y=Stage_mm/10)) +
+  geom_line() +
+  labs(y = 'Stage (cm)',
+       x = 'Date') +
+  scale_x_datetime(date_labels = "%b-%y", date_break = "3 months") +
+  theme(axis.text.x = element_text(angle = 45)) +
+  facet_wrap(~site)
 
-ggplotly(stage_plot)
+#stage_plot
+  
+#ggplotly(stage_plot)
 
 #write.csv(stage, 'bennett_stage.csv')
 
 ```
 
-## Stage response to rainfall
+# Stage response to rainfall (tipping buckets)
 
 ```{r stage response, echo = FALSE}
 
@@ -385,19 +416,28 @@ response_list <- list(me_response, mm_response, mw_response,
 #all events for all sites
 response <- bind_rows(response_list)
 
-ggplot(response, aes(x=site, y=Stage_range)) + geom_boxplot() +
-  ggtitle('Stage response amount (mm)')
+ggplot(response, aes(x=site, y=Stage_range/10)) + 
+  geom_boxplot() +
+  labs(y = 'Stage Response (cm)') +
+  ggtitle('Stage response amount')
 
-ggplot(response, aes(x=site, y=lag2p_hr)) + geom_boxplot() +
+ggplot(response, aes(x=site, y=lag2p_hr)) + 
+  geom_boxplot() +
   ggtitle('Lag to Peak (hr)')
 
-ggplot(response, aes(x=site, y=Stage_mm_max)) + geom_boxplot() +
-  ggtitle('Stage max (mm)')
+ggplot(response, aes(x=site, y=Stage_mm_max/10)) + 
+  geom_boxplot() +
+  labs(y = "Max stage (cm)") +
+  ggtitle('Max stage')
 
-ggplot(response, aes(x=MI60, y=lag2p_hr, color = site)) + geom_point() +
-  ggtitle('MI60 vs lag to peak')
-
-ggplot(response, aes(x=MI60, y=Stage_range, color = site)) + geom_point() +
+response %>% 
+  mutate(treatment = if_else(site %in% c('mm', 'me', 'mw'),
+                             'mulch',
+                             'no mulch')) %>%
+  ggplot(aes(x=MI60, y=Stage_range/10, color = site, shape = treatment)) + 
+  geom_point(size =2) +
+  labs(y = 'Max stage (cm)') +
+  scale_color_brewer(palette = "Dark2") +
   ggtitle('MI60 vs stage max')
 
 response_summary <- response %>%
@@ -407,12 +447,8 @@ response_summary <- response %>%
   summarize(Count = n(),
             Positive_response = sum(response),
             Max_Stage_Response = max(Stage_range),
-            Median_Stage_response = median(Stage_range),
             Mean_Stage_response = mean(Stage_range),
-            Stdev_Stage_response = sd(Stage_range),
-            Median_lag2p_hr = median(lag2p_hr),
-            Mean_lag2p_hr = mean(lag2p_hr),
-            Stdev_lag2p_hr = sd(lag2p_hr)) %>%
+            Mean_lag2p_hr = mean(lag2p_hr)) %>%
   mutate_if(is.numeric,
             round,
             digits = 2)
@@ -426,7 +462,7 @@ kable(response_summary) %>%
 
 ```
 
-## Rainfall thresholds
+# Rainfall thresholds
 
 ```{r rainfall thresholds, echo = FALSE}
 
@@ -455,9 +491,9 @@ kable(thresh) %>%
 
 ```
 
-## Larimer County Bennett precip and Q
+# Larimer County Bennett rain and Q
 
-### Larimer Country Bennett rainfall metrics
+## Larimer Country Bennett rainfall metrics
 
 ```{r larimer co rainfall metrics, echo = FALSE}
 #hourly data
@@ -523,11 +559,8 @@ ben_events_summary <- ben_events %>%
   select(c(Site, P, MI60)) %>%
   summarize(Count = n(),
             Total_P = sum(P, na.rm = TRUE),
-            Median_P = median(P, na.rm = TRUE),
             Max_P = max(P, na.rm = TRUE),
-            Stdev_P = sd(P, na.rm = TRUE),
-            Max_MI60 = max(MI60, na.rm = TRUE),
-            Stdev_MI60 = sd(MI60, na.rm = TRUE)) %>%
+            Max_MI60 = max(MI60, na.rm = TRUE)) %>%
   mutate_if(is.numeric,
             round,
             digits = 4)
@@ -537,7 +570,7 @@ kable(ben_events_summary) %>%
 
 ```
 
-### Larimer County Bennett stage/Q metrics
+## Larimer County Bennett stage/Q metrics
 
 ```{r Larimer co stage, echo = F}
 
@@ -624,17 +657,239 @@ ben_response_summary <- ben_response %>%
   summarize(Count = n(),
             Positive_response = sum(response),
             Max_q_Response = max(q_range),
-            Median_q_response = median(q_range),
             Mean_q_response = mean(q_range),
-            Stdev_q_response = sd(q_range),
-            Median_lag2p_hr = median(lag2p_hr),
             Mean_lag2p_hr = mean(lag2p_hr),
-            Stdev_lag2p_hr = sd(lag2p_hr)) %>%
+            Max_lag2p_hr = max(lag2p_hr)) %>%
   mutate_if(is.numeric,
             round,
             digits = 2)
 
+kable(ben_response_summary) %>%
+  kable_styling()
+
+
 # all 81 events have responses? so not calculating threshold & kappa
+
+```
+
+# Logistic regression 
+
+Rainfall (tipping buckets) thresholds using a logistic regression
+
+```{r}
+library(irr)
+
+ben_q <- ben_q %>%
+  rename(floor_dt = datetime)
+
+#########################################
+#mm
+mm_response2 <- mm_response %>%
+  mutate(floor_dt = floor_date(datetime_maxstage, 'hour'))
+    
+mm_response2 <- left_join(mm_response2, ben_q, by = 'floor_dt') %>%
+  mutate(doy = yday(floor_dt))
+
+mm_glm <- glm(response ~ q_cms + doy, data = mm_response2, family = binomial)
+
+mm_response2$pred <- predict(mm_glm, mm_response2, type = 'response')
+
+mm_response3 <- mm_response2 %>%
+  mutate(prediction = if_else(pred > 0.5, 1, 0)) %>%
+  ungroup() %>% 
+  select(response, prediction)
+
+mm_kappa <- kappa2(mm_response3)
+mm_kappa$value
+
+######################################
+#me
+me_response2 <- me_response %>%
+  mutate(floor_dt = floor_date(datetime_maxstage, 'hour'))
+    
+me_response2 <- left_join(me_response2, ben_q, by = 'floor_dt') %>%
+  mutate(doy = yday(floor_dt))
+
+me_glm <- glm(response ~ q_cms + doy, data = me_response2, family = binomial)
+
+me_response2$pred <- predict(me_glm, me_response2, type = 'response')
+
+me_response3 <- me_response2 %>%
+  mutate(prediction = if_else(pred > 0.5, 1, 0)) %>%
+  ungroup() %>% 
+  select(response, prediction)
+
+me_kappa <- kappa2(me_response3)
+me_kappa$value
+
+##################################
+#mw
+mw_response2 <- mw_response %>%
+  mutate(floor_dt = floor_date(datetime_maxstage, 'hour'))
+    
+mw_response2 <- left_join(mw_response2, ben_q, by = 'floor_dt') %>%
+  mutate(doy = yday(floor_dt))
+
+mw_glm <- glm(response ~ q_cms + doy, data = mw_response2, family = binomial)
+
+mw_response2$pred <- predict(mw_glm, mw_response2, type = 'response')
+
+mw_response3 <- mw_response2 %>%
+  mutate(prediction = if_else(pred > 0.5, 1, 0)) %>%
+  ungroup() %>% 
+  select(response, prediction)
+
+mw_kappa <- kappa2(mw_response3)
+mw_kappa$value
+
+#############################################
+#um
+um_response2 <- um_response %>%
+  mutate(floor_dt = floor_date(datetime_maxstage, 'hour'))
+    
+um_response2 <- left_join(um_response2, ben_q, by = 'floor_dt') %>%
+  mutate(doy = yday(floor_dt))
+
+um_glm <- glm(response ~ q_cms + doy, data = um_response2, family = binomial)
+
+um_response2$pred <- predict(um_glm, um_response2, type = 'response')
+
+um_response3 <- um_response2 %>%
+  mutate(prediction = if_else(pred > 0.5, 1, 0)) %>%
+  ungroup() %>% 
+  select(response, prediction)
+
+um_kappa <- kappa2(um_response3)
+um_kappa$value
+
+#####################################################
+#ue
+ue_response2 <- ue_response %>%
+  mutate(floor_dt = floor_date(datetime_maxstage, 'hour'))
+    
+ue_response2 <- left_join(ue_response2, ben_q, by = 'floor_dt') %>%
+  mutate(doy = yday(floor_dt))
+
+ue_glm <- glm(response ~ q_cms + doy, data = ue_response2, family = binomial)
+
+ue_response2$pred <- predict(ue_glm, ue_response2, type = 'response')
+
+ue_response3 <- ue_response2 %>%
+  mutate(prediction = if_else(pred > 0.5, 1, 0)) %>%
+  ungroup() %>% 
+  select(response, prediction)
+
+ue_kappa <- kappa2(ue_response3)
+ue_kappa$value
+
+###################################################
+#uw
+uw_response2 <- uw_response %>%
+  mutate(floor_dt = floor_date(datetime_maxstage, 'hour'))
+    
+uw_response2 <- left_join(uw_response2, ben_q, by = 'floor_dt') %>%
+  mutate(doy = yday(floor_dt))
+
+uw_glm <- glm(response ~ q_cms + doy, data = uw_response2, family = binomial)
+
+uw_response2$pred <- predict(uw_glm, uw_response2, type = 'response')
+
+uw_response3 <- uw_response2 %>%
+  mutate(prediction = if_else(pred > 0.5, 1, 0)) %>%
+  ungroup() %>% 
+  select(response, prediction)
+
+uw_kappa <- kappa2(uw_response3)
+uw_kappa$value
+
+## make a df for this
+first <- c('me', 'mm', 'mw',
+           'ue', 'um', 'uw')
+second <- c(me_kappa$value, mm_kappa$value, mw_kappa$value,
+            ue_kappa$value, um_kappa$value, uw_kappa$value)
+
+log_kappas <- data.frame(first,second) %>%
+  rename(site = first,
+         kappa = second)
+
+kable(log_kappas) %>%
+  kable_styling()
+
+```
+
+
+```{r}
+#trying to add bed incision
+# bedtest <- function(events_df, stage_df) {
+#   
+#   response <- data.frame()
+#   
+#   for(i in 1:nrow(events_df)){
+#     temp <- stage_df %>%
+#       filter(datetime >=(events_df$starttime[i]) 
+#              & datetime <=(events_df$endtime[i] + 12*60*60))
+#     
+#     temp$event = ifelse(temp$datetime >=(events_df$starttime[i]) 
+#                         & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+#                         events_df$event[i])
+#     
+#     temp$duration_hr = ifelse(temp$datetime >=(events_df$starttime[i]) 
+#                               & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+#                               events_df$duration_hr[i])
+#     
+#     temp$P = ifelse(temp$datetime >=(events_df$starttime[i]) 
+#                     & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+#                     events_df$P[i])
+#     
+#     temp$MI5 = ifelse(temp$datetime >=(events_df$starttime[i]) 
+#                       & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+#                       events_df$MI5[i])
+#     
+#     temp$MI15 = ifelse(temp$datetime >=(events_df$starttime[i]) 
+#                        & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+#                        events_df$MI15[i])
+#     
+#     temp$MI30 = ifelse(temp$datetime >=(events_df$starttime[i]) 
+#                        & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+#                        events_df$MI30[i])
+#     
+#     temp$MI60 = ifelse(temp$datetime >=(events_df$starttime[i]) 
+#                        & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+#                        events_df$MI60[i])
+#     
+#     temp$starttime = ifelse(temp$datetime >=(events_df$starttime[i]) 
+#                             & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+#                             events_df$starttime[i])
+#     
+#     temp$endtime = ifelse(temp$datetime >=(events_df$starttime[i]) 
+#                           & temp$datetime <=(events_df$endtime[i] + 12*60*60),
+#                           events_df$endtime[i])
+#     
+#     response <- rbind(response, temp)
+#   }
+  
+  #out <- response #%>%
+    # group_by(event) %>%
+    # mutate(Stage_range = max(Stage_mm) - min(Stage_mm)) %>%
+    # group_by(event) %>%
+    # filter(Stage_mm == max(Stage_mm)) %>%
+    # rename(Stage_mm_max = Stage_mm) %>% 
+    # group_by(event) %>%
+    # filter(datetime == max(datetime)) %>%
+    # rename(datetime_maxstage = datetime) %>%
+    # mutate(starttime_rain = as_datetime(starttime),
+    #        endtime_rain = as_datetime(endtime),
+    #        lag2p_hr = as.numeric(datetime_maxstage - starttime_rain)) %>%
+    # filter(!duration_hr == 0) %>%
+    # mutate(response = ifelse(Stage_range > 2, 1, 0)) %>% 
+    # select(-c(starttime, endtime))
+    # 
+}
+
+#me_response2 <- bedtest(me_events, me_stage)
+
+
+
 
 ```
 
