@@ -396,6 +396,11 @@ stage_plot <- ggplot(stage, aes(x=datetime, y=Stage_mm/10)) +
 
 #write.csv(stage, 'bennett_stage.csv')
 
+# save(me_stage, mm_stage,
+#      mw_stage, ue_stage,
+#      um_stage, uw_stage,
+#      file = 'stage.Rdata')
+
 ```
 
 # Stage response to rainfall (tipping buckets)
@@ -884,7 +889,7 @@ kable(log_kappas) %>%
     # mutate(response = ifelse(Stage_range > 2, 1, 0)) %>% 
     # select(-c(starttime, endtime))
     # 
-}
+#}
 
 #me_response2 <- bedtest(me_events, me_stage)
 
