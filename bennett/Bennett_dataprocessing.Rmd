@@ -31,7 +31,8 @@ library(gridExtra)
 
 
 ```{r loading data, include=FALSE}
-setwd("N:/Research/Kampf/Private/field_data/bennett")
+
+setwd("/Volumes/Kampf/Private/field_data/bennett")
 
 #load rainfall metric functions
 load('rain_metrics.RData')
@@ -464,6 +465,16 @@ ggplot(response_summary, aes(x=site, y=(Positive_response/Count))) +
 
 kable(response_summary) %>%
   kable_styling()
+
+
+#bed change
+ggplot(response, aes(x=site, y=bed_change_mm/10)) + 
+  geom_boxplot() +
+  labs(y = "Bed change (cm)") +
+  ggtitle('Bed change')
+
+
+
 
 ```
 
