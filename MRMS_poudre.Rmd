@@ -1,0 +1,140 @@
+---
+title: "Poudre MRMS extract"
+author: "Megan Sears"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: journal
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F,
+                      message = F,
+                      fig.width = 12,
+                      fig.height = 6)
+library(tidyverse)
+library(lubridate)
+library(raster)
+library(rgdal)
+library(sf)
+library(sp)
+library(mapview)
+library(terra)
+library(tmap)
+library(readr)
+library(gridExtra)
+library(ggplot2); theme_set(theme_bw(base_size = 16))
+library(here)
+library(irr)
+library(plotly)
+library(kableExtra)
+library(tmap)
+```
+
+```{r}
+#cpf watershed polygons
+pr_sheds <- vect('GIS/cpf_watersheds_20210618.shp') #does not include Bighorn!
+
+pr_look <- as(pr_sheds, 'Spatial') %>%
+  st_as_sf() %>%
+  filter(!Name %in% c('dadd', 'dry_trib')) #don't need these 
+
+#mapview(pr_look, zcol = 'Name') #make sure right watersheds
+
+pr_sheds <- vect(pr_look) %>%
+  terra::project(., 'EPSG:26913')
+
+# bb for croping rasters
+pr_bb <- st_bbox(pr_sheds)
+
+#mapview(pr_bb) + mapview(pr_look) #check bbox
+
+```
+
+```{r make it a function}
+
+setwd('/Users/megansears/Documents/MRMS/2022')
+
+filenames <- list.files(".", pattern='.grib2', full.names=F)   
+
+  for(fileName in filenames) {
+
+#pull in raster
+r <- rast(fileName) %>%
+  terra::project(., 'EPSG:26913')
+
+#crop raster to cpf
+crop <- terra::crop(r, ext(pr_bb))
+names(crop) <- 'p_mmhr'
+
+#extract using terra bc it has more functions :)
+extract <- terra::extract(crop, pr_sheds, fun = mean, touches = T, exact = T)
+
+extract$name <- pr_sheds$Name
+
+timestamp <- substr(fileName, 25, 39)
+
+extract <- extract %>%
+  mutate(datetime = ymd_hms(timestamp)) %>%
+  mutate(datetime = datetime - (7 * 60 * 60)) %>%
+  mutate(doy = yday(datetime)) %>%
+  mutate(hour = hour(datetime))
+
+write.csv(extract, paste0('extract_', extract$doy[1],'_', extract$hour[1],'.csv'))
+
+  }
+
+# BIGHORN NEEDS TO BE DONE AFTER SEPARATELY 
+
+```
+
+```{r compile all CSVs}
+
+#compile all CSVs
+mrms_21 <- list.files(path='/Users/megansears/Documents/MRMS/2021/cpf_2021', full.names = T) %>%
+  lapply(read_csv) %>%
+  bind_rows
+
+mrms_22 <- list.files(path='/Users/megansears/Documents/MRMS/2022/cpf_2022', full.names = T) %>%
+  lapply(read_csv) %>%
+  bind_rows
+
+#remove random columns
+pr_mrms_21 <- pr_mrms_21 %>%
+  dplyr::select(-c(...1, ID, doy, hour))
+
+pr_mrms_22 <- pr_mrms_22 %>%
+  dplyr::select(-c(...1, ID, doy, hour))
+
+write_csv(pr_mrms_21, 'mrms_21.csv')
+write_csv(pr_mrms_22, 'mrms_22.csv')
+
+```
+
+
+```{r quick mrms check}
+ggplot(mrms_21, aes(x = datetime, y = p_mmhr)) +
+  geom_line() +
+  facet_wrap(~name)
+ggplot(mrms_22, aes(x = datetime, y = p_mmhr)) +
+  geom_line() +
+  facet_wrap(~name)
+mrms_21 <- mrms_21 %>%
+  group_by(name) %>% 
+  mutate(year = year(datetime),
+         p_mm_cum = cumsum(p_mmhr))
+mrms_22 <- mrms_22 %>%
+  group_by(name) %>% 
+  mutate(year = year(datetime),
+         p_mm_cum = cumsum(p_mmhr))
+ggplot(mrms_21, aes(x = datetime, y = p_mm_cum)) +
+  geom_line() +
+  facet_wrap(~name)
+ggplot(mrms_22, aes(x = datetime, y = p_mm_cum)) +
+  geom_line() +
+  facet_wrap(~name)
+```
