@@ -95,11 +95,11 @@ write.csv(extract, paste0('extract_', extract$doy[1],'_', extract$hour[1],'.csv'
 ```{r compile all CSVs}
 
 #compile all CSVs
-mrms_21 <- list.files(path='/Users/megansears/Documents/MRMS/2021/cpf_2021', full.names = T) %>%
+pr_mrms_21 <- list.files(path='/Users/megansears/Documents/MRMS/cpf_2021', full.names = T) %>%
   lapply(read_csv) %>%
   bind_rows
 
-mrms_22 <- list.files(path='/Users/megansears/Documents/MRMS/2022/cpf_2022', full.names = T) %>%
+pr_mrms_22 <- list.files(path='/Users/megansears/Documents/MRMS/cpf_2022', full.names = T) %>%
   lapply(read_csv) %>%
   bind_rows
 
@@ -110,8 +110,8 @@ pr_mrms_21 <- pr_mrms_21 %>%
 pr_mrms_22 <- pr_mrms_22 %>%
   dplyr::select(-c(...1, ID, doy, hour))
 
-write_csv(pr_mrms_21, 'mrms_21.csv')
-write_csv(pr_mrms_22, 'mrms_22.csv')
+write_csv(pr_mrms_21, 'cpf_mrms_21.csv')
+write_csv(pr_mrms_22, 'cpf_mrms_22.csv')
 
 ```
 

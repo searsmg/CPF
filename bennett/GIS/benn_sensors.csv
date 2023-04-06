@@ -1,0 +1,19 @@
+,Type,y,x,Region,Burn_status,Snow_zone,Sensor_model
+u_w,stream,40.66039395,-105.560857,frontrange,burned_2020,,WT-HR1000
+u_w,rain,40.66005439,-105.5578187,frontrange,burned_2020,,Rainwise
+u_m,stream,40.65766455,-105.5555571,frontrange,burned_2020,,WT-HR1000
+u_m,rain,40.65444226,-105.5587228,frontrange,burned_2020,,Rainwise
+u_e,stream,40.6573273,-105.5454499,frontrange,burned_2020,,WT-HR1000
+u_e,rain,40.65742355,-105.5461262,frontrange,burned_2020,,Rainwise
+m_w,stream,40.65478438,-105.5397333,frontrange,burned_2020,,WT-HR1000
+m_w,rain,40.65542297,-105.5380118,frontrange,burned_2020,,Rainwise
+m_m,stream,40.65315058,-105.5335843,frontrange,burned_2020,,WT-HR1000
+m_e,stream,40.64588047,-105.5324039,frontrange,burned_2020,,WT-HR1000
+m_e,rain,40.64609596,-105.5329463,frontrange,burned_2020,,Rainwise
+m_m,rain,40.64708286,-105.5457988,frontrange,burned_2020,,
+m_m_upper,stream,40.64918059,-105.5382072,frontrange,burned_2020,,WT-HR1000
+m_e_upper,stream,40.64066288,-105.5406341,frontrange,burned_2020,,WT-HR1000
+m_w_upper,stream,40.65156727,-105.5480623,frontrange,burned_2020,,WT-HR1000
+u_e_upper,stream,40.65461076,-105.5515173,frontrange,burned_2020,,WT-HR 64K
+u_w_upper,stream,40.65483,-105.56546,frontrange,burned_2020,,WT-HR 64K
+u_m_lower,stream,40.65869,-105.55195,frontrange,burned_2020,,WT-HR 64K
