@@ -133,5 +133,3 @@ ggplotly(stage_plot)
 
 
 ```
-
-
