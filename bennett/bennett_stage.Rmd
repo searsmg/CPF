@@ -52,3 +52,86 @@ lapply(names(dataframes), function(x) assign(x, dataframes[[x]], envir = .Global
 rm(dataframes) #remove dataframes list
 
 ```
+
+```{r}
+
+#me stage
+me_stage <- me_stage_compo %>%
+  mutate(site = 'me',
+         datetime = mdy_hm(datetime))
+
+#me_upper stage
+me_upper_stage <- me_upper_stage %>%
+  mutate(site = 'me_upper',
+         datetime = mdy_hm(datetime))
+
+#mm stage
+mm_stage <- mm_stage_compo %>%
+  mutate(site = 'mm',
+         datetime = parse_date_time(datetime, 
+                                    orders = c('%m/%d/%Y %H:%M',
+                                               '%m/%d/%Y %H:%M:%S')))
+
+#mm upper stage
+mm_upper_stage <- mm_upper_stage %>%
+  mutate(site = 'mm_upper',
+         datetime = mdy_hm(datetime))
+
+#mw stage
+mw_stage <- mw_stage_compo %>%
+  mutate(site = 'mw',
+         datetime = mdy_hm(datetime))
+
+#mw_upper stage
+mw_upper_stage <- mw_upper_stage %>%
+  mutate(site = 'mw_upper',
+         datetime = mdy_hm(datetime))
+
+#ue stage
+ue_stage <- ue_stage_compo %>%
+  mutate(site = 'ue',
+         datetime = mdy_hm(datetime))
+
+#ue_upper stage (not downloaded yet)
+ue_upper_stage <- ue_upper_stage %>%
+  mutate(site = 'ue_upper',
+         datetime = mdy_hm(datetime))
+
+#um stage
+um_stage <- um_stage_compo %>%
+  mutate(site = 'um',
+         datetime = mdy_hm(datetime))
+
+#um_lower stage
+um_lower_stage <- um_lower_stage %>%
+  mutate(site = 'um_lower',
+         datetime = mdy_hm(datetime))
+
+#uw stage
+uw_stage <- uw_stage_compo %>%
+  mutate(site = 'uw',
+         datetime = mdy_hm(datetime))
+
+#uw_upper stage
+uw_upper_stage <- uw_upper_stage %>%
+  mutate(site = 'uw_upper',
+         datetime = mdy_hm(datetime))
+
+stage <- bind_rows(me_stage, me_upper_stage, mm_stage, mm_upper_stage,
+                   mw_stage, mw_upper_stage, ue_stage, ue_upper_stage, um_stage, um_lower_stage,
+                   uw_stage, uw_upper_stage)
+
+stage_plot <- ggplot(stage, aes(x=datetime, y=Stage_mm/10, color = site)) +
+  geom_line() +
+  labs(y = 'Stage (cm)',
+       x = 'Date') +
+  scale_x_datetime(date_labels = "%b-%y", date_break = "3 months")
+
+#stage_plot
+  
+ggplotly(stage_plot)
+
+
+```
+
+
