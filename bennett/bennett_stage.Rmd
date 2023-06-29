@@ -53,7 +53,7 @@ rm(dataframes) #remove dataframes list
 
 ```
 
-```{r}
+```{r, fig.width=12, fig.height=10}
 
 #me stage
 me_stage <- me_stage_compo %>%
