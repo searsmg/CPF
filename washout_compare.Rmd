@@ -1,5 +1,5 @@
 ---
-title: "Bennett stage"
+title: "Washout stage comparison"
 author: "Megan Sears"
 date: "`r Sys.Date()`"
 output:
