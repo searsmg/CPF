@@ -41,9 +41,27 @@ baro <- read_csv('/Volumes/Kampf/Private/field_data/tunnel_baro_composite.csv') 
   summarize(Pw_psi=mean(Pw_psi)) %>%
   rename(baro_psi = Pw_psi)
 
+dry_baro <- read_csv('/Volumes/Kampf/Private/field_data/dry_creek/Dry_baro_composite.csv') %>%
+  mutate(datetime = mdy_hm(datetime)) %>%
+  select(datetime, Pa_psi) %>%
+  drop_na(datetime) %>%
+  group_by(datetime=floor_date(datetime, '1 hour')) %>%
+  summarize(Pa_psi=mean(Pa_psi)) %>%
+  rename(dry_baro_psi = Pa_psi) %>%
+  filter(datetime > ymd_hm('2021-10-25 09:00'))
 
-stage <- left_join(stage, baro, by = 'datetime') %>% 
-  mutate(stage_cm = (stage_psi-baro_psi)*70.307)
+ggplot(dry_baro, aes(datetime, dry_baro_psi)) + geom_line()
+
+usgs_baro <- read_csv('usgs_baro.csv') %>%
+  mutate(datetime = mdy_hm(datetime)) %>%
+  mutate(usgs_baro_psi = baro_mmHg / 51.715) %>%
+  select(datetime, dry_baro_psi = usgs_baro_psi)
+  
+dry_baro <- bind_rows(dry_baro, usgs_baro)
+
+
+stage <- left_join(stage, dry_baro, by = 'datetime') %>% 
+  mutate(stage_cm = (stage_psi-dry_baro_psi)*70.307)
 
 stage_plot <- stage %>% 
   filter(stage_cm > 0) %>% 
