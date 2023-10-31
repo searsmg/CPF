@@ -1,0 +1,213 @@
+﻿ObjectID,GlobalID,CreationDate,Creator,EditDate,Editor,Transect Name,Point ID,Burn status,Other - Burn status,Date and Time,Depth 1 (cm),Depth 2 (cm),Depth 3 (cm),Depth 4 (cm),Depth 5 (cm),Snow core diameter (cm),Snow core 1 depth (cm),Snow core 1 weight (g),Snow core 2 depth (cm),Snow core 2 weight (g),Snow core 3 depth (cm),Snow core 3 weight (g),Notes,x,y
+1,b63e4584-3691-4087-beb4-851231717f5e,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw32,Unburned,,2/18/22 17:23,128,132,150,138,134,,,,,,,,,-105.8758062,40.5573754
+2,ff27660e-99ec-4b17-8ec1-ab0c5a9a25c0,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw31,Partially_burned_some_needles,,2/18/22 17:35,146,149,136,135,145,,,,,,,,,-105.875919,40.558198
+3,66a9c8b0-8aef-4b05-9549-274fa980ff0b,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw30,Unburned,,2/18/22 17:42,123,112,110,128,125,,,,,,,,,-105.8756739,40.5586786
+4,7aa12779-e531-45fb-ae46-6689b5a421bf,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw29,Partially_burned_some_needles,,2/18/22 17:50,89,145,133,106,146,6,131,1030,134,1030,149,1110,,-105.8760593,40.5592418
+5,71a094e5-a045-4c2d-8c75-492a7f1de0a5,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw28,Partially_burned_some_needles,,2/18/22 18:12,133,131,134,127,134,,,,,,,,,-105.8760906,40.5600023
+6,02d2fa05-6abf-49df-beb2-211b37248d21,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw23,All_burned_no_needles,,2/18/22 18:28,145,149,145,157,146,,,,,,,,,-105.8787428,40.5614738
+7,d6769b4c-04b0-4a7c-be1d-9d1fce0bfa02,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw22,All_burned_no_needles,,2/18/22 18:34,109,102,124,111,104,,,,,,,,,-105.8794406,40.5616986
+8,4aebafea-155f-4462-8dcf-17dc8008ac4e,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw21,All_burned_no_needles,,2/18/22 18:40,143,154,149,149,152,6,154,1260,149,1040,,,,-105.8800418,40.5618424
+9,cd3d7162-d5aa-46a7-a800-ff09c064c894,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw20,Partially_burned_some_needles,,2/18/22 19:14,156,138,141,164,175,,,,,,,,,-105.8807464,40.5617967
+10,ec13e21b-8596-48b8-9435-870fe44cd2e5,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw7,All_burned_no_needles,,2/18/22 20:09,95,93,99,95,94,,,,,,,,,-105.8790568,40.5574734
+11,f956da5d-df29-40ef-a15f-189841c50335,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw6,All_burned_no_needles,,2/18/22 20:16,80,81,88,86,85,6,79,480,75,480,80,690,,-105.8787534,40.5571525
+12,72169f28-6382-42c2-a09a-5fbd3c13873a,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw5,All_burned_no_needles,,2/18/22 20:34,78,79,82,85,83,,,,,,,,,-105.8783423,40.556932
+13,cc7cd514-03f2-4a02-8fdb-65e9b5e0484c,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw4,Partially_burned_some_needles,,2/18/22 20:40,139,141,133,133,129,,,,,,,,,-105.8776155,40.556691
+14,e3720446-d5d4-4e4d-bc9f-db3f07f556a7,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw3,Partially_burned_some_needles,,2/18/22 20:46,140,142,137,152,135,,,,,,,,,-105.8772118,40.5563811
+15,e7fa2dc7-1c7b-475d-a5cd-5cc960495d80,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw2,Unburned,,2/18/22 20:52,108,98,115,95,110,6,115,920,115,880,109,880,,-105.8768808,40.5561782
+16,f837f21a-d0bf-43ec-830d-4a3002026ce4,2/19/22 0:21,millerq_CSUesri,2/19/22 0:21,millerq_CSUesri,Persistent,Jw1,Unburned,,2/18/22 21:07,113,119,104,116,111,,,,,,,,,-105.8766574,40.5558673
+17,76c574df-3dae-462c-aeb9-d6fab6ddc001,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab1,Partially_burned_some_needles,,2/18/22 16:58,71,92,78,76,96,,,,,,,,"8 trees in 5 m
+
+
+",-105.8350968,40.6050649
+18,d04c49bf-c412-4a47-9486-f66e97ab02d1,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab2,Partially_burned_some_needles,,2/18/22 17:03,58,57,56,53,52,,,,,,,,5 trees partially burned,-105.8349218,40.60527273
+19,7eba7b48-2790-4dac-aa71-8dc398708db9,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab3,Partially_burned_some_needles,,2/18/22 17:10,20,16,17,17,13,,,,,,,,"Open ish, slope with sun 
+
+
+",-105.8345674,40.60564612
+20,8cb3b37c-5070-4d3c-b203-7af6e11aecf3,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab4,Partially_burned_some_needles,,2/18/22 17:16,60,56,61,63,52,6,55,390,51,290,56,390,,-105.8340953,40.6060041
+21,301f11e0-d678-4c6e-aa5b-b84cadf937a7,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab5,Partially_burned_some_needles,,2/18/22 17:30,43,49,54,51,49,,,,,,,,"Cones left 
+",-105.833701,40.6059255
+22,c5245586-acdb-4abb-9bdc-103fa954ba94,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab6,Partially_burned_some_needles,,2/18/22 17:36,85,79,87,89,83,,,,,,,,"Losgepole
+",-105.8333133,40.60586795
+23,db2ec2c0-8c50-4a52-a8a7-3857b18aec67,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab7,Partially_burned_some_needles,,2/18/22 17:42,80,81,74,65,70,6,80,710,80,610,81,670,,-105.8326059,40.60550393
+24,98d54428-ae12-46be-863d-e78f6f151ba5,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab8,Partially_burned_some_needles,,2/18/22 18:06,85,91,85,87,80,,,,,,,,,-105.8324753,40.60491695
+25,38d004aa-2a62-4d4e-a94d-8277bc2465f1,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab9,All_burned_no_needles,,2/18/22 18:12,5,11,7,10,6,,,,,,,,"
+
+
+",-105.8324003,40.60450632
+26,3418aab6-9276-4d33-b37b-e553499d20eb,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab10,All_burned_no_needles,,2/18/22 18:16,55,55,58,51,53,,,,,,,,"
+
+",-105.8327144,40.60395284
+27,bb58cbe6-5c63-4983-9693-687a0d9a1692,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab11,All_burned_no_needles,,2/18/22 18:20,67,67,64,62,65,,,,,,,,Swale,-105.832913,40.60367972
+28,9ee525d4-afff-4af3-8755-4670bc6d23da,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab12,All_burned_no_needles,,2/18/22 18:26,6,4,4,4,0,,,,,,,,"
+
+
+",-105.8334394,40.60344192
+29,7e4379e7-d21f-4378-9ab2-b41c158233a2,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab13,Partially_burned_some_needles,,2/18/22 18:31,46,43,41,55,56,6,52,470,56,490,57,490,,-105.8340025,40.60296321
+30,fc860a2f-204f-4599-adcb-cd36bddf2f36,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab14,Partially_burned_some_needles,,2/18/22 18:43,54,52,57,70,70,,,,,,,,,-105.8340887,40.60274053
+31,5d371b0d-0685-4cca-869c-bb065b159ebe,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab15,Partially_burned_some_needles,,2/18/22 18:48,70,65,74,63,79,,,,,,,,"
+",-105.8343894,40.60304518
+32,d58b3bda-5379-44e1-8546-87b27afad776,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab16,Unburned,,2/18/22 18:51,60,83,83,81,83,,,,,,,,,-105.8346041,40.60319022
+33,a68084f9-e507-4da5-afe6-6d7fa8890c54,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_burn,Ab17,Unburned,,2/18/22 18:57,36,38,30,48,48,,,,,,,,Beetle kill,-105.8347858,40.60357075
+34,d4bcdfc1-e4c7-4145-905f-f8806b9a8c80,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag1,Unburned,,2/18/22 19:26,43,97,62,69,64,6,65,400,52,400,56,390,,-105.8196208,40.6145314
+35,d743e687-8fde-438b-9907-d8add26a9cde,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag2,Unburned,,2/18/22 19:39,66,61,55,53,57,,,,,,,,,-105.8194127,40.61421
+36,4ee566ee-bc38-422b-acc6-73c4ccf7cbfc,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag3,Unburned,,2/18/22 19:44,48,55,73,57,41,,,,,,,,,-105.8191177,40.61408743
+37,329f01b0-9442-43bc-b6b3-75bfc3031138,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag11,Unburned,,2/18/22 19:53,51,38,45,47,38,,,,,,,,"
+
+",-105.8193423,40.61392808
+38,23363435-21f9-4498-9a76-059d34756bf6,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag12,Unburned,,2/18/22 19:59,38,33,35,50,31,,,,,,,,,-105.8194604,40.6137053
+39,640fb329-3284-47c5-8f90-549b42175d1a,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag13,Unburned,,2/18/22 20:05,39,47,54,51,51,6,54,390,50,300,55,370,,-105.8188155,40.6135709
+40,39d46f7b-84dc-44e6-a047-3d77edd53166,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag14,Unburned,,2/18/22 20:20,52,58,54,56,52,,,,,,,,"
+",-105.818233,40.61340732
+41,f11dd11c-d1f4-4d66-933a-9574ef9f793f,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag9,Unburned,,2/18/22 20:26,62,54,55,54,57,,,,,,,,"Burn on bottom beetle kill on top 
+
+",-105.8178312,40.61298282
+42,073e12f4-810d-426c-a9c8-b664b6b65b3a,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag10,Unburned,,2/18/22 20:29,52,58,57,59,56,,,,,,,,,-105.8176159,40.61287977
+43,4ce6f439-a0f9-4742-9bc8-c2373f10e521,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag15,Unburned,,2/18/22 20:35,44,49,56,51,52,,,,,,,,,-105.8185551,40.6127972
+44,43cc7415-c9c8-497b-8c1a-eebd0885f3a1,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag8,Unburned,,2/18/22 20:39,56,53,52,52,50,,,,,,,,,-105.8183959,40.61291333
+45,2da16297-b955-42c8-b1a3-5d673ba9467e,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag7,Unburned,,2/18/22 20:42,45,47,42,47,45,,,,,,,,,-105.8187318,40.61316555
+46,531f2efd-9c84-415a-ac50-1b1e9e127194,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag6,Unburned,,2/18/22 20:46,55,51,51,53,51,,,,,,,,"
+",-105.8193746,40.61341802
+47,37587802-b7d0-41ca-9127-dea1481f0820,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag5,Unburned,,2/18/22 20:54,46,46,35,48,48,,,,,,,,,-105.8199251,40.61364543
+48,aca7399d-9225-4d57-87e2-90302e28968b,2/20/22 2:19,searsmg_CSUesri,2/20/22 2:19,searsmg_CSUesri,Transitional_unburn,Ag4,Unburned,,2/18/22 20:59,52,45,44,61,63,6,71,480,70,440,68,440,,-105.8203429,40.61387733
+49,3d9534be-c8e9-4136-8ae3-11a49da0cebe,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab1,Partially_burned_some_needles,,3/18/22 16:10,124,120,112,118,119,,,,,,,,,-105.8351173,40.60504795
+50,f1c971b0-333e-4446-89d2-2fba37ea0342,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab2,Partially_burned_some_needles,,3/18/22 16:17,75,73,42,67,72,,,,,,,,,-105.8349191,40.60527048
+51,a7358aca-53a0-4dfb-b28e-259e2263ddd7,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab3,Partially_burned_some_needles,,3/18/22 16:20,13,11,13,9,15,,,,,,,,,-105.8345731,40.6056458
+52,ea08a720-d2b8-440c-806c-096103c2af41,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab4,Partially_burned_some_needles,,3/18/22 16:22,71,71,67,72,69,6.2,75,550,80,590,76,630,,-105.8341076,40.60597907
+53,ebebeca1-7ad3-4448-89dd-68daa5701f9f,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab5,Partially_burned_some_needles,,3/18/22 16:35,25,20,33,22,25,,,,,,,,,-105.8337153,40.60593262
+54,b4f91896-dea4-4f62-a6b6-336a185bb599,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab6,All_burned_no_needles,,3/18/22 16:38,103,106,107,105,104,,,,,,,,,-105.8333463,40.60587535
+55,f7a0fbae-4dd9-4374-8b79-a0e8a314d4a4,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab7,All_burned_no_needles,,3/18/22 16:40,86,87,85,84,86,6.2,85,760,83,760,86,760,,-105.8326452,40.60552397
+56,67c65f80-f8df-49e9-822c-a4ef65306cf1,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab8,All_burned_no_needles,,3/18/22 16:57,105,104,103,109,107,,,,,,,,,-105.8324715,40.60493623
+57,82783d39-10cb-4110-b23c-d0517ef180a2,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab9,All_burned_no_needles,,3/18/22 16:59,9,11,8,10,11,,,,,,,,,-105.8324145,40.60451542
+58,cc115306-02c0-4e93-a8dc-c4ec45e0d011,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab10,All_burned_no_needles,,3/18/22 17:02,64,64,62,64,63,,,,,,,,,-105.8326995,40.60395265
+59,255d0146-6c1e-46f4-8d25-56393a80a716,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab11,All_burned_no_needles,,3/18/22 17:04,82,75,73,75,83,,,,,,,,,-105.832907,40.60369485
+60,4a0df5ab-293a-4a70-911e-e54311897699,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab12,All_burned_no_needles,,3/18/22 17:08,10,8,6,9,8,,,,,,,,,-105.8334417,40.6034525
+61,884f0896-75d1-4b97-a5a2-34d5b5c897d1,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab13,All_burned_no_needles,,3/18/22 17:10,55,55,44,52,53,6.2,55,540,56,540,57,620,"
+
+",-105.8339639,40.6029833
+62,558e2497-0010-416c-a457-5220b8849f2e,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab18,Partially_burned_some_needles,,3/18/22 17:21,25,46,44,46,47,6.2,42,370,40,370,40,370,,-105.8339603,40.60282693
+63,454825cd-33e0-4360-9b5b-115375f359d2,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab14,Partially_burned_some_needles,,3/18/22 17:31,78,77,74,78,72,,,,,,,,,-105.8341052,40.60271783
+64,0bf39f5c-8d8d-4b43-b7d5-b02a138354cb,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab15,Partially_burned_some_needles,,3/18/22 17:33,51,88,73,53,90,,,,,,,,,-105.8344236,40.6030377
+65,56a3fc70-0b16-4caf-950f-219eeb9766ed,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ab16,Unburned,,3/18/22 17:35,103,107,104,104,98,,,,,,,,,-105.8345994,40.60318889
+66,800e0d9e-eb6f-454b-9eea-cae17cab3122,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ab17,Partially_burned_some_needles,,3/18/22 17:38,41,43,41,41,49,,,,,,,,,-105.8347506,40.60357666
+67,8ab927be-63ee-4e7c-9660-5c9c9e5f2e2b,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag1,Unburned,,3/18/22 18:11,62,65,65,64,47,6.2,58,530,63,660,67,660,"
+",-105.8196184,40.61454248
+68,b96bda51-5348-4fcb-872e-ab553505e190,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag2,Unburned,,3/18/22 18:22,78,78,80,76,78,,,,,,,,,-105.8194433,40.61420242
+69,957a5e0b-aa15-43a3-bc60-2e61d89b1316,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag3,Unburned,,3/18/22 18:27,95,90,102,84,86,,,,,,,,,-105.8190969,40.6140775
+70,5e9d8717-11c1-4663-80a3-4cde05d7bb10,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag11,Unburned,,3/18/22 18:30,61,61,60,64,60,,,,,,,,,-105.8193259,40.61393173
+71,bd6b3283-f712-4945-8e31-af2a0f21fb2c,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag12,Unburned,,3/18/22 18:33,48,43,45,51,55,,,,,,,,,-105.8194503,40.61370843
+72,b27f2ec3-be33-43a7-82ae-8ada6b3c1fea,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag13,Unburned,,3/18/22 18:36,54,51,52,54,52,6.2,54,440,52,490,54,440,,-105.8188441,40.61357282
+73,9ac6d6dd-0f3b-49b9-8063-1f93b653c893,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag14,Unburned,,3/18/22 18:48,65,65,67,67,67,,,,,,,,,-105.8182339,40.61340182
+74,21fe91e7-5346-4d33-969a-88ddcdda2ef5,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag9,Unburned,,3/18/22 18:52,69,67,66,65,74,,,,,,,,,-105.817811,40.61300612
+75,13c550f5-1f68-46bb-8112-e49ff3d7e0ad,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_burn,Ag10,Partially_burned_some_needles,,3/18/22 18:54,65,67,69,61,62,,,,,,,,,-105.8176259,40.61290388
+76,c31acdf5-48f1-4691-b943-5bae71625bad,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag15,Unburned,,3/18/22 18:58,65,64,58,67,60,,,,,,,,,-105.8185727,40.61277338
+77,222505d0-9e3f-48e1-9f13-5ad9f32f4f92,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag8,Partially_burned_some_needles,,3/18/22 19:00,76,74,75,75,75,,,,,,,,,-105.818418,40.61290315
+78,5beffd13-c822-429e-8c70-8c90f5c8ae08,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag16,Unburned,,3/18/22 19:04,53,51,59,58,51,,,,,,,,,-105.8182271,40.61309165
+79,bea987b0-87d2-497b-9cf2-4fb3b58267e8,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag7,Unburned,,3/18/22 19:07,55,54,53,51,52,,,,,,,,,-105.8187574,40.61311196
+80,f51f754b-7ff5-49d4-985a-78e4a611de0c,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag6,Unburned,,3/18/22 19:10,56,61,56,56,55,,,,,,,,,-105.8193253,40.61337451
+81,35e1d296-4ff6-4ca3-b00c-1ac96e6544ac,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag5,Unburned,,3/18/22 19:13,58,55,54,55,56,,,,,,,,,-105.8199046,40.61366313
+82,c49a505a-cbf5-42bb-a7d5-a8c033a0bea1,3/19/22 13:54,searsmg_CSUesri,3/19/22 13:54,searsmg_CSUesri,Transitional_unburn,Ag4,Unburned,,3/18/22 19:16,76,73,71,75,78,6.2,54,300,70,300,61,370,,-105.8203718,40.6138471
+83,b790ffea-72fd-4af5-9983-74d0ddbbf2b5,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw1,Unburned,,3/19/22 15:55,121,118,113,125,145,,,,,,,,"
+",-105.8766316,40.55585574
+84,75d68559-8153-4b62-9fa8-6def3f2cd312,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw2,Unburned,,3/19/22 16:02,118,122,109,113,123,6.2,131,1160,132,1170,131,1170,,-105.8769851,40.55610758
+85,59abb7ed-eda7-4b31-8b3a-16aa2f78781c,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw3,Partially_burned_some_needles,,3/19/22 16:16,193,184,175,167,151,,,,,,,,,-105.8772507,40.55642147
+86,89d4a74d-61a9-4fe2-8a8e-f3554f000d1d,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw4,Partially_burned_some_needles,,3/19/22 16:26,144,145,149,148,166,,,,,,,,,-105.8776302,40.55674023
+87,9e464623-b31f-4d1f-a481-d2e0b212d27f,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw5,All_burned_no_needles,,3/19/22 16:33,88,100,110,97,108,,,,,,,,,-105.8784172,40.55688965
+88,da3e7908-a79c-43ba-8763-b3f294cd4336,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw6,All_burned_no_needles,,3/19/22 16:37,91,91,88,88,90,6.2,85,960,90,1000,89,1090,,-105.8786773,40.55722333
+89,582646d6-0d2b-4f15-a438-b6374f4ae6da,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw7,All_burned_no_needles,,3/19/22 16:55,101,112,90,104,106,,,,,,,,,-105.8791823,40.5574902
+90,8816a3cd-939b-4954-90c9-8e10bfa4b7ba,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw33,All_burned_no_needles,,3/19/22 17:08,91,99,103,90,93,6.2,95,800,89,840,79,630,,-105.8800681,40.55873945
+91,94e7eaa2-9ccc-4bc0-ba68-81084928de68,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw20,Partially_burned_some_needles,,3/19/22 17:34,151,202,195,181,179,,,,,,,,,-105.880772,40.56177805
+92,cbd41bfd-6aff-4a5c-b531-db43e0b528b1,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw21,Partially_burned_some_needles,,3/19/22 17:47,169,155,161,157,160,,,,,,,,,-105.8801546,40.56166807
+93,3dbb7afb-c516-4967-914c-33a2078a1bc8,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw22,All_burned_no_needles,,3/19/22 17:53,120,122,133,148,141,,,,,,,,,-105.8794213,40.56174278
+94,3d3819ac-7700-487c-9bcd-e2240b3faa4f,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw23,All_burned_no_needles,,3/19/22 17:57,175,169,178,190,189,,,,,,,,,-105.8786857,40.56147437
+95,180ca493-a347-4bfd-87fb-69ddcd0f58ae,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw28,Unburned,,3/19/22 18:14,155,169,162,165,155,,,,,,,,,-105.8760412,40.56000689
+96,4b0d559a-29ef-4f94-a746-bcdbadb33ce6,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw34,Unburned,,3/19/22 18:19,127,130,141,136,129,,,,,,,,,-105.8759239,40.55971292
+97,1ba8d5aa-423b-4b9c-b743-7c7ebe5c0bf8,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw29,Partially_burned_some_needles,,3/19/22 18:24,142,135,152,144,162,6.2,145,1210,155,1460,166,1460,,-105.8760315,40.55927098
+98,4e2cb7e6-1486-459f-8e30-be0552a17c2f,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw30,Unburned,,3/19/22 18:39,156,153,148,166,162,,,,,,,,,-105.8757283,40.55866726
+99,2e4496ba-222a-4660-8cac-5fdafc66a678,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw35,Unburned,,3/19/22 18:44,165,149,148,153,170,,,,,,,,,-105.8756762,40.55830062
+100,b2dc305f-5637-4d7d-8f73-dab95a398f63,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw31,Partially_burned_some_needles,,3/19/22 18:53,165,171,161,158,172,,,,,,,,,-105.8759557,40.55821293
+101,3e27cd16-8ded-440c-9052-5e847ca42dd9,3/19/22 21:47,searsmg_CSUesri,3/19/22 21:47,searsmg_CSUesri,Persistent,Jw32,Unburned,,3/19/22 19:04,153,151,155,150,160,,,,,,,,,-105.8757543,40.55741356
+102,4302154b-cda5-4063-899c-ae91056eca1e,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab1,Partially_burned_some_needles,,4/15/22 15:44,114,101,118,90,78,,,,,,,,,-105.8350747,40.60507689
+103,7014f202-d026-46f5-a67b-946c55688a1b,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab2,Partially_burned_some_needles,,4/15/22 15:52,50,39,53,48,64,,,,,,,,,-105.8349107,40.60525376
+104,a38fef59-d809-41a5-9401-3fcd1d758716,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab3,Partially_burned_some_needles,,4/15/22 15:59,15,16,16,10,10,,,,,,,,"
+
+",-105.8345723,40.60563964
+105,01ffac32-e906-41b3-a014-97827e8d63fa,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab4,Partially_burned_some_needles,,4/15/22 16:04,40,58,85,81,77,6.2,65,530,58,460,82,790,"
+
+",-105.8340672,40.60600759
+106,a9f58c60-a9d4-46e3-b7b5-c1b59b8bfe34,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab5,Partially_burned_some_needles,,4/15/22 16:32,53,31,40,35,34,,,,,,,,,-105.833695,40.60598007
+107,cace30e1-1527-4cd6-b62d-7d931ccc00db,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab6,All_burned_no_needles,,4/15/22 16:36,100,96,99,102,103,,,,,,,,,-105.8332677,40.60588922
+108,9a36bed4-cc24-4c88-b6be-2ad3745fd61f,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ab7,All_burned_no_needles,,4/15/22 16:41,17,69,66,68,74,6.2,78,790,69,630,630,,"
+
+",-105.8325805,40.60555997
+109,c3244b87-e58f-4210-8450-23f83585fac9,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab8,All_burned_no_needles,,4/15/22 17:04,92,93,92,85,90,,,,,,,,,-105.8324468,40.60494737
+110,4fb9b838-c1e3-4a8f-8f5c-7d4e4cebf090,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab9,All_burned_no_needles,,4/15/22 17:09,10,10,10,9,10,,,,,,,,,-105.8324031,40.60451778
+111,fbdaf801-c4f0-4460-8cd0-06316994da8f,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab10,All_burned_no_needles,,4/15/22 17:13,41,41,39,44,42,,,,,,,,,-105.8327023,40.6040009
+112,da7cb4e7-9418-4354-8a67-aa98755f0a32,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab11,All_burned_no_needles,,4/15/22 17:16,54,56,61,56,63,,,,,,,,,-105.8328789,40.60369563
+113,2340235d-d846-4861-af99-ada9e14bb40a,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,A12,All_burned_no_needles,,4/15/22 17:21,5,8,5,11,6,,,,,,,,,-105.8334008,40.60346794
+114,37f4815c-eb5e-45d3-bf00-f052024807eb,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab13,Partially_burned_some_needles,,4/15/22 17:25,18,17,16,16,13,6.2,17,100,17,150,,,Hardly any snow ,-105.8339177,40.60299746
+115,b286b833-fc8c-4c11-a34c-34a95f740186,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab18,All_burned_no_needles,,4/15/22 17:43,13,14,16,14,12,6.2,18,150,15,150,13,70,,-105.8340166,40.60284493
+116,7cce510b-4a61-4995-a8b4-cf24bdb77032,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab14,All_burned_no_needles,,4/15/22 17:55,40,42,49,53,47,,,,,,,,,-105.8341098,40.60275792
+117,b2cd8424-3af1-407b-b8ac-eaf905f66b23,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab15,All_burned_no_needles,,4/15/22 17:59,88,95,101,103,91,,,,,,,,,-105.8344144,40.60304237
+118,7ceb6cee-e234-472e-b454-5ca6cf706fa3,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab16,Unburned,,4/15/22 18:02,91,97,91,92,89,,,,,,,,,-105.8345917,40.60317632
+119,38bb929d-9628-4be9-b404-eac10a785967,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_burn,Ab17,Partially_burned_some_needles,,4/15/22 18:06,14,13,12,15,12,,,,,,,,,-105.8347194,40.60355975
+120,ed48387c-b366-4023-bd79-dce233b662d5,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag1,Unburned,,4/15/22 18:39,45,50,52,60,54,6.2,43,440,43,400,47,400,,-105.8196062,40.61447725
+121,e76188c8-e1bb-4fcc-88f9-70708634d9ff,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag2,Unburned,,4/15/22 18:52,66,61,53,65,67,,,,,,,,,-105.8194263,40.61425128
+122,6cf1df94-2d19-48b1-bee6-86d8399763be,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag3,Unburned,,4/15/22 18:54,67,101,109,90,85,,,,,,,,,-105.818973,40.61409488
+123,f4cbec4d-37be-4da1-9f8f-c55f6a31aadd,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag11,Unburned,,4/15/22 18:59,33,39,42,33,33,,,,,,,,,-105.8193269,40.61391459
+124,9f5bef26-0635-4ddf-9115-bac95451388b,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag12,Unburned,,4/15/22 19:03,38,47,39,35,30,,,,,,,,,-105.8193831,40.61370356
+125,040a8f07-2c9e-44cf-a3e1-e46b09261acd,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag13,Unburned,,4/15/22 19:07,37,43,38,47,48,6.2,45,400,48,470,48,460,,-105.8186938,40.61355864
+126,96afef9e-eaa8-4ba7-a04c-35d17e6f5dbd,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag14,Unburned,,4/15/22 19:20,66,61,58,60,69,,,,,,,,,-105.8181776,40.61336956
+127,03c66d29-2b0c-43ed-b208-f30ce894e98e,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag17,Unburned,,4/15/22 19:25,40,40,50,43,46,,,,,,,,,-105.8182469,40.61306559
+128,8bab6583-ddd4-4551-9fd2-aebdec06b2e7,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag9,Unburned,,4/15/22 19:27,70,64,73,73,65,,,,,,,,,-105.8178384,40.61296732
+129,e341ac8c-6350-4357-a56d-fc264693af40,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag10,Unburned,,4/15/22 19:29,54,61,60,62,59,,,,,,,,,-105.8175768,40.61287483
+130,b280854f-69d7-4e78-a1f2-7c85fb20d4ec,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag8,Unburned,,4/15/22 19:33,31,49,75,63,69,,,,,,,,,-105.818421,40.61285453
+131,aa7f3c7c-270d-49cd-9cfa-aa6001116da4,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag15,Unburned,,4/15/22 19:35,79,56,45,66,45,,,,,,,,,-105.8185566,40.6127772
+132,b3c3f2fd-76ac-4f5a-8bd9-ddcd384450c8,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag7,Unburned,,4/15/22 19:39,36,44,43,40,44,,,,,,,,,-105.8187483,40.61311444
+133,e09b8f05-6479-4cda-95ec-ef638a91e24e,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag6,Unburned,,4/15/22 19:41,35,55,36,46,45,,,,,,,,,-105.8194578,40.61336278
+134,5cb55e22-4b66-4d7a-819a-1581826f6dbe,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag5,Unburned,,4/15/22 19:45,43,48,54,43,59,,,,,,,,,-105.8199247,40.61364479
+135,26a20ed7-078a-4c02-9ee6-e6f59237adaa,4/15/22 22:14,searsmg_CSUesri,4/15/22 22:14,searsmg_CSUesri,Transitional_unburn,Ag4,Unburned,,4/15/22 19:48,86,84,86,70,76,6.2,85,530,89,830,89,870,,-105.8202878,40.61382063
+136,ea4a59bb-0b05-499b-a41a-19ea65f852ae,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw1,Unburned,,4/30/22 17:03,137,130,125,137,110,,,,,,,,,-105.8766613,40.55588717
+137,45981830-c562-4196-8d56-9e5e58793a92,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw2,Unburned,,4/30/22 17:06,143,125,143,142,131,6.2,135,1300,141,1300,140,1300,"
+",-105.8768969,40.55619135
+138,f55339f6-4716-4534-9b51-221751883f87,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw2,Partially_burned_some_needles,,4/30/22 17:14,171,167,151,142,163,,,,,,,,,-105.8772907,40.55641183
+139,76078583-fb84-41ca-b7cc-86f27d0d1330,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw4,Unburned,,4/30/22 17:16,144,144,142,151,142,,,,,,,,,-105.8776251,40.55673465
+140,4b61af78-0b63-49ed-b095-e27952b8ef26,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw5,All_burned_no_needles,,4/30/22 17:21,47,36,78,84,82,,,,,,,,,-105.8783126,40.55691858
+141,ef444287-6490-40b5-9023-78f8a2340f1c,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw6,All_burned_no_needles,,4/30/22 17:24,59,64,64,67,74,6.2,70,680,61,640,55,640,"
+
+",-105.8786595,40.55723343
+142,898df354-3059-4a34-870f-9d84e9eef9a2,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw7,All_burned_no_needles,,4/30/22 17:38,90,90,86,66,91,,,,,,,,,-105.8790937,40.55752647
+143,43c02b59-f187-42f7-86e7-39e349a1e338,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw33,All_burned_no_needles,,4/30/22 17:45,101,94,125,128,119,6.2,104,1130,106,1010,109,1030,,-105.8800391,40.55871419
+144,a35ee5fe-15f3-4725-9ee2-cd50cccf3fca,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw20,Unburned,,4/30/22 18:07,199,184,228,204,201,,,,,,,,,-105.8807388,40.56181364
+145,3d7999bf-3246-4933-9a7b-1db9e2f6e2aa,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw21,All_burned_no_needles,,4/30/22 18:11,184,182,179,181,180,,,,,,,,,-105.8801449,40.56178303
+146,24359db9-944d-490a-9fd1-f0c4f8c3f94b,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw22,All_burned_no_needles,,4/30/22 18:19,122,133,144,155,139,,,,,,,,,-105.8793795,40.56176275
+147,de9ea394-e6b4-4a21-a26e-9e3add6471a3,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw23,All_burned_no_needles,,4/30/22 18:24,173,177,172,172,147,,,,,,,,,-105.8786617,40.56157056
+148,d1a55e2c-4115-4401-a48e-599f112c11f1,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw28,Unburned,,4/30/22 18:35,170,165,171,155,167,,,,,,,,,-105.8760506,40.55998678
+149,ac2e62e6-20f0-402c-a122-bf053919cb97,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw34,Unburned,,4/30/22 18:37,146,144,132,128,148,,,,,,,,,-105.8758631,40.55972218
+150,6af332b1-6482-4332-a936-8fdf6b9179bf,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw29,Partially_burned_some_needles,,4/30/22 18:39,142,157,138,149,146,6.3,141,1600,144,1680,152,1850,"
+
+",-105.8759843,40.55925065
+151,8de18cf8-e811-4500-a1bc-db260e5ba24f,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw30,Unburned,,4/30/22 18:46,162,158,149,143,168,,,,,,,,,-105.8757116,40.55871256
+152,f3a13324-7da1-44d5-b19e-58f83cfc3830,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw35,Unburned,,4/30/22 18:48,172,148,119,125,163,,,,,,,,,-105.8756634,40.55834903
+153,0bbbc4e2-090c-4503-98e8-a8409fa06a68,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw31,Unburned,,4/30/22 18:50,172,165,167,171,174,,,,,,,,,-105.8758702,40.55818106
+154,bc24da91-416f-4aa8-a435-cb319b6156ef,4/30/22 22:56,,4/30/22 22:56,,Persistent,Jw32,Unburned,,4/30/22 18:53,149,164,164,147,148,,,,,,,,,-105.8757835,40.55741987
+155,d1504b89-db79-4e94-849b-371971579f93,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw1,Unburned,,5/27/22 17:26,79,59,83,94,73,,,,,,,,,-105.8765894,40.55588712
+156,7e7d907c-2148-4780-8319-cd9bb8303d5e,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw2,Unburned,,5/27/22 17:30,71,85,86,85,94,6.2,85,850,87,901,80,906,,-105.8768864,40.55617877
+157,ad4bdeb5-9267-42b8-a847-a103d689a724,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw3,Unburned,,5/27/22 17:40,101,112,109,105,102,,,,,,,,,-105.8772185,40.55640153
+158,865f0213-7350-433b-b632-7dfb6e512f62,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw4,Partially_burned_some_needles,,5/27/22 17:43,59,48,54,55,55,,,,,,,,,-105.8775809,40.55673447
+159,b3819a4b-23fd-441e-89f1-0ae1283ac14b,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw5,All_burned_no_needles,,5/27/22 17:46,0,0,0,0,0,,,,,,,,,-105.8783157,40.55690848
+160,6ad9b931-c36d-43ce-955b-2663f0386ed3,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw6,All_burned_no_needles,,5/27/22 17:50,0,0,0,0,0,,,,,,,,,-105.8786665,40.55723542
+161,f1d4d98e-9a3c-4c6f-bfe6-01a97f67de78,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw7,All_burned_no_needles,,5/27/22 17:52,0,0,0,0,0,,,,,,,,,-105.8789625,40.5575311
+162,920f7dc1-f727-49f8-9990-2bf6687d0bee,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw33,All_burned_no_needles,,5/27/22 17:58,16,12,12,10,34,6.2,32,336,39,462,43,511,,-105.880046,40.55873937
+163,e24b69a0-d6b0-4fb3-9479-42ceb230ba91,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw20,Partially_burned_some_needles,,5/27/22 18:27,191,180,159,178,174,,,,,,,,,-105.8806919,40.5617423
+164,e97021da-f3b7-4808-93a9-48a8e9a5242f,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw21,All_burned_no_needles,,5/27/22 18:34,95,109,126,93,106,,,,,,,,,-105.880214,40.56179298
+165,89350435-1bf1-4d7f-9811-3446d45c0d91,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw22,All_burned_no_needles,,5/27/22 18:37,56,56,54,53,56,,,,,,,,,-105.8794234,40.56172722
+166,debd0915-d442-4b62-bfb8-89b6eab13a6a,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw23,All_burned_no_needles,,5/27/22 18:40,90,96,103,105,102,,,,,,,,,-105.8787416,40.56146368
+167,a3639bf8-c1d6-41e0-9318-cf4ff7a08728,6/1/22 20:07,,6/1/22 20:07,,Persistent,Jw28,Unburned,,5/27/22 18:48,103,128,132,126,124,,,,,,,,,-105.8760909,40.55998483
+168,50a18561-f34a-4b93-abd6-6d3a27a6347e,6/1/22 20:08,,6/1/22 20:08,,Persistent,Jw34,Unburned,,5/27/22 18:51,96,113,111,109,94,,,,,,,,,-105.8759681,40.55974607
+169,221f4139-cdfc-4f34-9a82-998d844e1507,6/1/22 20:08,,6/1/22 20:08,,Persistent,Jw29,Partially_burned_some_needles,,5/27/22 18:56,56,44,60,61,59,6.2,63,807,68,721,60,782,,-105.8760284,40.5592757
+170,a35449dd-e2c0-4321-b080-39d67c862b92,6/1/22 20:08,,6/1/22 20:08,,Persistent,Jw30,Unburned,,5/27/22 19:05,83,89,86,83,91,,,,,,,,,-105.8758016,40.55863057
+171,2240dadb-2ba7-4308-92bb-a2e72774da8e,6/1/22 20:08,,6/1/22 20:08,,Persistent,Jw35,Unburned,,5/27/22 19:08,113,91,68,91,96,,,,,,,,,-105.8757016,40.55832408
+172,020378c4-5bab-4f0a-96e3-2f4ccb7a6986,6/1/22 20:08,,6/1/22 20:08,,Persistent,Jw31,Unburned,,5/27/22 19:10,96,107,84,80,77,,,,,,,,,-105.8759618,40.55824032
+173,0a728672-20ec-492f-bd97-5eec3cc36bc7,6/1/22 20:08,,6/1/22 20:08,,Persistent,Jw31,Unburned,,5/27/22 19:14,86,84,82,68,83,,,,,,,,,-105.8757984,40.55739297
+174,d59fb4cc-7270-4279-813d-8abadb412d1b,11/11/22 18:05,,11/11/22 18:05,,Persistent,Jw20,Partially_burned_some_needles,,6/17/22 19:49,55,0,0,83,43,,,,,,,,,-105.8807144,40.5617285
